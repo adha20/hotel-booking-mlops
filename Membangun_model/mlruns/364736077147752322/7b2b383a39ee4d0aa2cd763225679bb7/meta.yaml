@@ -1,0 +1,16 @@
+artifact_uri: file:C:/Users/muham/Downloads/PEMBELAJARAN-EXTERNAL/DICODING/Project
+  adha/SMSML_Muhammad_Adha_Hotel_Booking/Membangun_model/mlruns/364736077147752322/7b2b383a39ee4d0aa2cd763225679bb7/artifacts
+end_time: 1783650811525
+entry_point_name: ''
+experiment_id: '364736077147752322'
+lifecycle_stage: active
+run_id: 7b2b383a39ee4d0aa2cd763225679bb7
+run_name: manual_random_forest_tuning
+run_uuid: 7b2b383a39ee4d0aa2cd763225679bb7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1783650716676
+status: 3
+tags: []
+user_id: muham

@@ -1,0 +1,84 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.1
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.0
+mlflow_version: 2.19.0
+model_size_bytes: 5300
+model_uuid: c74b610592574a9c832e4375b9310b79
+run_id: 7a4948edafea4bf48523fa4115f3fc9a
+signature:
+  inputs: '[{"type": "double", "name": "adr", "required": true}, {"type": "long",
+    "name": "adults", "required": true}, {"type": "double", "name": "agent", "required":
+    true}, {"type": "double", "name": "arrival_date_day_of_month", "required": true},
+    {"type": "double", "name": "arrival_date_week_number", "required": true}, {"type":
+    "long", "name": "arrival_date_year", "required": true}, {"type": "long", "name":
+    "arrival_month_number", "required": true}, {"type": "long", "name": "babies",
+    "required": true}, {"type": "long", "name": "booking_changes", "required": true},
+    {"type": "double", "name": "children", "required": true}, {"type": "double", "name":
+    "company", "required": true}, {"type": "long", "name": "country_group_AUT", "required":
+    true}, {"type": "long", "name": "country_group_BEL", "required": true}, {"type":
+    "long", "name": "country_group_BRA", "required": true}, {"type": "long", "name":
+    "country_group_CHE", "required": true}, {"type": "long", "name": "country_group_CN",
+    "required": true}, {"type": "long", "name": "country_group_DEU", "required": true},
+    {"type": "long", "name": "country_group_ESP", "required": true}, {"type": "long",
+    "name": "country_group_FRA", "required": true}, {"type": "long", "name": "country_group_GBR",
+    "required": true}, {"type": "long", "name": "country_group_IRL", "required": true},
+    {"type": "long", "name": "country_group_ITA", "required": true}, {"type": "long",
+    "name": "country_group_NLD", "required": true}, {"type": "long", "name": "country_group_Other",
+    "required": true}, {"type": "long", "name": "country_group_PRT", "required": true},
+    {"type": "long", "name": "country_group_SWE", "required": true}, {"type": "long",
+    "name": "country_group_USA", "required": true}, {"type": "long", "name": "customer_type_Contract",
+    "required": true}, {"type": "long", "name": "customer_type_Group", "required":
+    true}, {"type": "long", "name": "customer_type_Transient", "required": true},
+    {"type": "long", "name": "customer_type_Transient-Party", "required": true}, {"type":
+    "double", "name": "days_in_waiting_list", "required": true}, {"type": "long",
+    "name": "deposit_type_No Deposit", "required": true}, {"type": "long", "name":
+    "deposit_type_Non Refund", "required": true}, {"type": "long", "name": "deposit_type_Refundable",
+    "required": true}, {"type": "long", "name": "distribution_channel_Corporate",
+    "required": true}, {"type": "long", "name": "distribution_channel_Direct", "required":
+    true}, {"type": "long", "name": "distribution_channel_GDS", "required": true},
+    {"type": "long", "name": "distribution_channel_TA/TO", "required": true}, {"type":
+    "long", "name": "distribution_channel_Undefined", "required": true}, {"type":
+    "long", "name": "has_agent", "required": true}, {"type": "long", "name": "has_children",
+    "required": true}, {"type": "long", "name": "has_company", "required": true},
+    {"type": "long", "name": "hotel_City Hotel", "required": true}, {"type": "long",
+    "name": "hotel_Resort Hotel", "required": true}, {"type": "long", "name": "is_repeated_guest",
+    "required": true}, {"type": "double", "name": "lead_time", "required": true},
+    {"type": "long", "name": "market_segment_Aviation", "required": true}, {"type":
+    "long", "name": "market_segment_Complementary", "required": true}, {"type": "long",
+    "name": "market_segment_Corporate", "required": true}, {"type": "long", "name":
+    "market_segment_Direct", "required": true}, {"type": "long", "name": "market_segment_Groups",
+    "required": true}, {"type": "long", "name": "market_segment_Offline TA/TO", "required":
+    true}, {"type": "long", "name": "market_segment_Online TA", "required": true},
+    {"type": "long", "name": "market_segment_Undefined", "required": true}, {"type":
+    "long", "name": "meal_BB", "required": true}, {"type": "long", "name": "meal_FB",
+    "required": true}, {"type": "long", "name": "meal_HB", "required": true}, {"type":
+    "long", "name": "meal_SC", "required": true}, {"type": "long", "name": "meal_Undefined",
+    "required": true}, {"type": "long", "name": "previous_bookings_not_canceled",
+    "required": true}, {"type": "long", "name": "previous_cancellations", "required":
+    true}, {"type": "long", "name": "required_car_parking_spaces", "required": true},
+    {"type": "long", "name": "reserved_room_type_A", "required": true}, {"type": "long",
+    "name": "reserved_room_type_B", "required": true}, {"type": "long", "name": "reserved_room_type_C",
+    "required": true}, {"type": "long", "name": "reserved_room_type_D", "required":
+    true}, {"type": "long", "name": "reserved_room_type_E", "required": true}, {"type":
+    "long", "name": "reserved_room_type_F", "required": true}, {"type": "long", "name":
+    "reserved_room_type_G", "required": true}, {"type": "long", "name": "reserved_room_type_H",
+    "required": true}, {"type": "long", "name": "reserved_room_type_L", "required":
+    true}, {"type": "long", "name": "stays_in_week_nights", "required": true}, {"type":
+    "long", "name": "stays_in_weekend_nights", "required": true}, {"type": "double",
+    "name": "total_guests", "required": true}, {"type": "long", "name": "total_of_special_requests",
+    "required": true}, {"type": "long", "name": "total_stays", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2026-07-10 02:29:39.319899'

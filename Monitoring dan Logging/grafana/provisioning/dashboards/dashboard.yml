@@ -1,0 +1,11 @@
+﻿apiVersion: 1
+
+providers:
+  - name: hotel-booking-dashboard
+    orgId: 1
+    folder: muhamadadha
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

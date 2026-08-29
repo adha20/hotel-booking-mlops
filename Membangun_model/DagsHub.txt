@@ -1,0 +1,11 @@
+﻿https://dagshub.com/adha20/SMSML_Muhammad_Adha
+
+Tracking MLflow online untuk model Hotel Booking Cancellation.
+
+Repo       : adha20/SMSML_Muhammad_Adha
+Experiment : Hotel Booking Cancellation - Random Forest Tuning
+Run        : manual_random_forest_tuning
+Status     : finished
+
+Run ulang:
+powershell -ExecutionPolicy Bypass -File .\run_dagshub_tuning.ps1

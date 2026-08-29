@@ -1,0 +1,16 @@
+artifact_uri: file:C:/Users/muham/Downloads/PEMBELAJARAN-EXTERNAL/DICODING/Project
+  adha/SMSML_Muhammad_Adha_Hotel_Booking/Membangun_model/mlruns/343088347853547676/7a4948edafea4bf48523fa4115f3fc9a/artifacts
+end_time: 1783650651762
+entry_point_name: ''
+experiment_id: '343088347853547676'
+lifecycle_stage: active
+run_id: 7a4948edafea4bf48523fa4115f3fc9a
+run_name: baseline_logreg_autolog
+run_uuid: 7a4948edafea4bf48523fa4115f3fc9a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1783650566666
+status: 3
+tags: []
+user_id: muham

@@ -1,0 +1,22 @@
+.git
+**/.git
+**/__pycache__
+**/.pytest_cache
+**/.ipynb_checkpoints
+**/.venv
+**/*.pyc
+**/mlruns
+**/.env
+
+Eksperimen_SML_Muhammad_Adha/hotel_bookings_raw
+Eksperimen_SML_Muhammad_Adha/preprocessing/hotel_bookings_preprocessing
+Membangun_model/hotel_bookings_preprocessing/train.csv
+Membangun_model/training_artifacts
+Monitoring dan Logging/1.bukti_serving
+Monitoring dan Logging/4.bukti monitoring Prometheus
+Monitoring dan Logging/5.bukti monitoring Grafana
+Monitoring dan Logging/6.bukti alerting Grafana
+Monitoring dan Logging/grafana
+Workflow-CI/MLProject/hotel_bookings_preprocessing
+Workflow-CI/MLProject/model_output
+Workflow-CI/MLProject/training_artifacts

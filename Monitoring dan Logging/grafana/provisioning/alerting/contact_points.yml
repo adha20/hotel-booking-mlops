@@ -1,0 +1,11 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: gmail-alert-contact
+    receivers:
+      - uid: gmail-alert-email
+        type: email
+        settings:
+          addresses: ${GRAFANA_ALERT_EMAIL}
+          singleEmail: false

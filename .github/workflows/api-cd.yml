@@ -1,0 +1,70 @@
+name: Hotel Booking API CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/api/**"
+      - "Membangun_model/model_output_tuned/**"
+      - "Membangun_model/hotel_bookings_preprocessing/test.csv"
+      - "railway.json"
+      - ".dockerignore"
+      - ".github/workflows/api-cd.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build_push_image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build API Docker image
+        run: docker build -f apps/api/Dockerfile -t hotel-booking-api:ci .
+
+      - name: Push API image to Docker Hub
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "Docker Hub secrets are not configured. Skipping image push."
+            exit 0
+          fi
+          IMAGE_NAME="$DOCKERHUB_USERNAME/hotel-booking-api:latest"
+          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker tag hotel-booking-api:ci "$IMAGE_NAME"
+          docker push "$IMAGE_NAME"
+
+  deploy_railway:
+    runs-on: ubuntu-latest
+    needs: build_push_image
+    container:
+      image: ghcr.io/railwayapp/cli:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy API to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_ENVIRONMENT: ${{ secrets.RAILWAY_ENVIRONMENT }}
+          RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ] || [ -z "$RAILWAY_PROJECT_ID" ]; then
+            echo "Railway secrets are not configured. Skipping Railway deployment."
+            exit 0
+          fi
+          TARGET_ENVIRONMENT="${RAILWAY_ENVIRONMENT:-production}"
+          if [ -n "$RAILWAY_SERVICE" ]; then
+            railway up --detach --project "$RAILWAY_PROJECT_ID" --environment "$TARGET_ENVIRONMENT" --service "$RAILWAY_SERVICE"
+          else
+            railway up --detach --project "$RAILWAY_PROJECT_ID" --environment "$TARGET_ENVIRONMENT"
+          fi
