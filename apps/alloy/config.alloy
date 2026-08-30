@@ -13,6 +13,7 @@ prometheus.scrape "hotel_booking_serving" {
   scheme          = sys.env("HOTEL_BOOKING_METRICS_SCHEME")
   metrics_path    = sys.env("HOTEL_BOOKING_METRICS_PATH")
   scrape_interval = "5s"
+  scrape_timeout  = "4s"
 
   forward_to = [prometheus.remote_write.grafana_cloud.receiver]
 }
