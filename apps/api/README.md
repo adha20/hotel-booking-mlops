@@ -44,7 +44,15 @@ docker run --rm -p 8000:8000 adha20/hotel-booking-api:latest
 
 ## Railway
 
-Railway akan memakai `railway.json` di root project dan Dockerfile `apps/api/Dockerfile`.
+Untuk CD production, Railway sebaiknya memakai Docker image yang dibuild oleh workflow `.github/workflows/api-cd.yml`. Workflow tersebut menjalankan continuous training dari `Workflow-CI/MLProject`, lalu membuild image API dengan model terbaru hasil CT.
+
+Image production:
+
+```text
+adha20/hotel-booking-api:latest
+```
+
+Deployment lama dari source GitHub tetap bisa dipakai sebagai fallback karena Dockerfile masih memiliki default model dari `Membangun_model/model_output_tuned`.
 
 Variable yang bisa diatur:
 
@@ -55,3 +63,14 @@ Variable yang bisa diatur:
 | `SAMPLE_DATA_PATH` | Lokasi sample test CSV, default `/app/sample/test.csv` |
 
 Railway menyediakan variable `PORT` otomatis, dan API sudah membacanya saat startup.
+
+Secret GitHub Actions yang dibutuhkan untuk CD penuh:
+
+| Secret | Fungsi |
+|---|---|
+| `DOCKERHUB_USERNAME` | Username Docker Hub |
+| `DOCKERHUB_TOKEN` | Access token Docker Hub |
+| `RAILWAY_TOKEN` | Token Railway untuk deploy otomatis |
+| `RAILWAY_PROJECT_ID` | ID project Railway |
+| `RAILWAY_SERVICE` | Nama service Railway API |
+| `RAILWAY_ENVIRONMENT` | Environment Railway, default `production` |
