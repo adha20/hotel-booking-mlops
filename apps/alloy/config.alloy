@@ -1,0 +1,29 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+prometheus.scrape "hotel_booking_serving" {
+  targets = [
+    {
+      "__address__" = sys.env("HOTEL_BOOKING_METRICS_HOST"),
+    },
+  ]
+
+  scheme          = sys.env("HOTEL_BOOKING_METRICS_SCHEME")
+  metrics_path    = sys.env("HOTEL_BOOKING_METRICS_PATH")
+  scrape_interval = "5s"
+
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = sys.env("GRAFANA_CLOUD_REMOTE_WRITE_URL")
+
+    basic_auth {
+      username = sys.env("GRAFANA_CLOUD_USERNAME")
+      password = sys.env("GRAFANA_CLOUD_TOKEN")
+    }
+  }
+}
