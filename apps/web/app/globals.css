@@ -1778,11 +1778,6 @@ p {
   flex: 1;
 }
 
-.staffSidebar nav a .navExternalIcon {
-  flex: 0 0 auto;
-  opacity: 0.72;
-}
-
 .staffSidebar nav a.disabled {
   cursor: not-allowed;
   opacity: 0.48;

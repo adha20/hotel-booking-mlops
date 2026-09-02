@@ -10,7 +10,6 @@ import {
   CalendarDays,
   Check,
   ClipboardCheck,
-  ExternalLink,
   FileText,
   Gauge,
   LayoutDashboard,
@@ -308,7 +307,6 @@ function StaffSidebar() {
               <a className={className} href={item.href} key={item.label} rel="noreferrer" target="_blank">
                 <Icon size={24} />
                 <span>{item.label}</span>
-                <ExternalLink className="navExternalIcon" size={15} />
               </a>
             );
           }

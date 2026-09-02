@@ -8,7 +8,6 @@ import {
   Building2,
   CalendarDays,
   ChevronDown,
-  ExternalLink,
   FileText,
   Gauge,
   LayoutDashboard,
@@ -350,7 +349,6 @@ function StaffSidebar() {
             >
               <Icon size={24} />
               <span>{item.label}</span>
-              {item.external ? <ExternalLink className="navExternalIcon" size={15} /> : null}
             </a>
           );
         })}
