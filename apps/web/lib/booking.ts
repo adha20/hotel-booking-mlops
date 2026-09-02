@@ -29,6 +29,7 @@ export type Hotel = {
 
 export type VisitPurpose = "leisure" | "business" | "family" | "group";
 export type PaymentChoice = "pay_at_property" | "pay_now" | "refundable_deposit";
+export type DemoRiskScenario = "Low" | "Medium" | "High";
 
 export type TravelerProfile = {
   id: string;
@@ -40,6 +41,29 @@ export type TravelerProfile = {
   previousCancellations: number;
   previousBookingsNotCanceled: number;
   defaultPurpose: VisitPurpose;
+  riskScenario: DemoRiskScenario;
+  riskSummary: string;
+  riskCriteria: string[];
+  systemMarketSegment: string;
+  systemDistributionChannel: string;
+  systemAgent: number;
+  systemCompany: number;
+  systemCustomerType: string;
+  defaultHotelId: string;
+  defaultRoomPlanId: string;
+  defaultLeadTimeDays: number;
+  defaultNights: number;
+  defaultRooms: number;
+  defaultAdults: number;
+  defaultChildren: number;
+  defaultBabies: number;
+  defaultPaymentChoice: PaymentChoice;
+  defaultBreakfastIncluded: boolean;
+  defaultAirportPickup: boolean;
+  defaultNeedParking: boolean;
+  defaultAccessibilityRequest: boolean;
+  defaultSpecialRequestNote: string;
+  defaultAddOnIds: string[];
 };
 
 export type BookingForm = {
@@ -118,6 +142,29 @@ export const travelerProfiles: TravelerProfile[] = [
     previousCancellations: 0,
     previousBookingsNotCanceled: 5,
     defaultPurpose: "leisure",
+    riskScenario: "Low",
+    riskSummary: "Returning guest with short booking window, refundable deposit, and clean cancellation history.",
+    riskCriteria: ["Short lead time", "Returning guest", "No previous cancellation", "Refundable deposit"],
+    systemMarketSegment: "Direct",
+    systemDistributionChannel: "Direct",
+    systemAgent: 0,
+    systemCompany: 0,
+    systemCustomerType: "Transient",
+    defaultHotelId: "deluxe-room",
+    defaultRoomPlanId: "deluxe-breakfast",
+    defaultLeadTimeDays: 5,
+    defaultNights: 2,
+    defaultRooms: 1,
+    defaultAdults: 2,
+    defaultChildren: 0,
+    defaultBabies: 0,
+    defaultPaymentChoice: "refundable_deposit",
+    defaultBreakfastIncluded: true,
+    defaultAirportPickup: false,
+    defaultNeedParking: true,
+    defaultAccessibilityRequest: false,
+    defaultSpecialRequestNote: "",
+    defaultAddOnIds: [],
   },
   {
     id: "sinta",
@@ -129,6 +176,29 @@ export const travelerProfiles: TravelerProfile[] = [
     previousCancellations: 1,
     previousBookingsNotCanceled: 0,
     defaultPurpose: "family",
+    riskScenario: "High",
+    riskSummary: "Family booking through OTA with cancellation history and a long advance window.",
+    riskCriteria: ["Long lead time", "Previous cancellation", "OTA channel", "No deposit payment"],
+    systemMarketSegment: "Online TA",
+    systemDistributionChannel: "TA/TO",
+    systemAgent: 9,
+    systemCompany: 0,
+    systemCustomerType: "Transient-Party",
+    defaultHotelId: "deluxe-room",
+    defaultRoomPlanId: "city-view-suite",
+    defaultLeadTimeDays: 120,
+    defaultNights: 5,
+    defaultRooms: 1,
+    defaultAdults: 2,
+    defaultChildren: 1,
+    defaultBabies: 0,
+    defaultPaymentChoice: "pay_at_property",
+    defaultBreakfastIncluded: true,
+    defaultAirportPickup: false,
+    defaultNeedParking: false,
+    defaultAccessibilityRequest: false,
+    defaultSpecialRequestNote: "",
+    defaultAddOnIds: [],
   },
   {
     id: "maya",
@@ -140,6 +210,97 @@ export const travelerProfiles: TravelerProfile[] = [
     previousCancellations: 0,
     previousBookingsNotCanceled: 12,
     defaultPurpose: "business",
+    riskScenario: "Low",
+    riskSummary: "Corporate repeat guest with company profile, refundable deposit, and stable booking history.",
+    riskCriteria: ["Corporate channel", "Repeat guest", "No previous cancellation", "Refundable deposit"],
+    systemMarketSegment: "Corporate",
+    systemDistributionChannel: "Corporate",
+    systemAgent: 0,
+    systemCompany: 40,
+    systemCustomerType: "Contract",
+    defaultHotelId: "executive-room",
+    defaultRoomPlanId: "executive-breakfast",
+    defaultLeadTimeDays: 7,
+    defaultNights: 2,
+    defaultRooms: 1,
+    defaultAdults: 1,
+    defaultChildren: 0,
+    defaultBabies: 0,
+    defaultPaymentChoice: "refundable_deposit",
+    defaultBreakfastIncluded: true,
+    defaultAirportPickup: false,
+    defaultNeedParking: true,
+    defaultAccessibilityRequest: false,
+    defaultSpecialRequestNote: "",
+    defaultAddOnIds: [],
+  },
+  {
+    id: "nadia",
+    fullName: "Nadia Larasati",
+    email: "nadia.larasati@email.com",
+    phone: "0812-8899-4411",
+    country: "GBR",
+    loyaltyTier: "Silver member",
+    previousCancellations: 0,
+    previousBookingsNotCanceled: 2,
+    defaultPurpose: "leisure",
+    riskScenario: "Medium",
+    riskSummary: "OTA leisure guest with moderate lead time and refundable deposit.",
+    riskCriteria: ["Moderate lead time", "OTA channel", "Refundable deposit", "Some prior completed stays"],
+    systemMarketSegment: "Online TA",
+    systemDistributionChannel: "TA/TO",
+    systemAgent: 9,
+    systemCompany: 0,
+    systemCustomerType: "Transient",
+    defaultHotelId: "suite-room",
+    defaultRoomPlanId: "suite-breakfast",
+    defaultLeadTimeDays: 35,
+    defaultNights: 3,
+    defaultRooms: 1,
+    defaultAdults: 2,
+    defaultChildren: 0,
+    defaultBabies: 0,
+    defaultPaymentChoice: "refundable_deposit",
+    defaultBreakfastIncluded: true,
+    defaultAirportPickup: true,
+    defaultNeedParking: false,
+    defaultAccessibilityRequest: false,
+    defaultSpecialRequestNote: "Late check-in around 10 PM.",
+    defaultAddOnIds: ["airport-pickup"],
+  },
+  {
+    id: "rudi",
+    fullName: "Rudi Hartono",
+    email: "rudi.hartono@email.com",
+    phone: "0813-6677-2299",
+    country: "PRT",
+    loyaltyTier: "New traveler",
+    previousCancellations: 2,
+    previousBookingsNotCanceled: 0,
+    defaultPurpose: "group",
+    riskScenario: "High",
+    riskSummary: "Large group booking with long lead time and previous cancellation signals.",
+    riskCriteria: ["Very long lead time", "Group reservation", "Previous cancellations", "OTA channel"],
+    systemMarketSegment: "Groups",
+    systemDistributionChannel: "TA/TO",
+    systemAgent: 9,
+    systemCompany: 0,
+    systemCustomerType: "Group",
+    defaultHotelId: "suite-room",
+    defaultRoomPlanId: "presidential-suite",
+    defaultLeadTimeDays: 150,
+    defaultNights: 6,
+    defaultRooms: 3,
+    defaultAdults: 6,
+    defaultChildren: 0,
+    defaultBabies: 0,
+    defaultPaymentChoice: "pay_at_property",
+    defaultBreakfastIncluded: false,
+    defaultAirportPickup: false,
+    defaultNeedParking: false,
+    defaultAccessibilityRequest: false,
+    defaultSpecialRequestNote: "",
+    defaultAddOnIds: [],
   },
 ];
 
@@ -302,19 +463,19 @@ export const initialBookingForm: BookingForm = {
   email: "andi.pratama@email.com",
   phone: "0812-3456-7890",
   arrivalDate: "2026-09-20",
-  nights: 3,
+  nights: 2,
   rooms: 1,
   adults: 2,
   children: 0,
   babies: 0,
-  roomPlanId: "executive-breakfast",
+  roomPlanId: "deluxe-breakfast",
   breakfastIncluded: true,
   airportPickup: false,
-  needParking: false,
+  needParking: true,
   accessibilityRequest: false,
   visitPurpose: "leisure",
-  paymentChoice: "pay_at_property",
-  specialRequestNote: "Late check-in around 10 PM.",
+  paymentChoice: "refundable_deposit",
+  specialRequestNote: "",
   promoCode: "",
 };
 
@@ -337,6 +498,37 @@ export function getTravelerProfile(id: string) {
   return travelerProfiles.find((profile) => profile.id === id) ?? travelerProfiles[0];
 }
 
+export function applyTravelerProfileDefaults(current: BookingForm, profile: TravelerProfile): BookingForm {
+  return {
+    ...current,
+    travelerProfileId: profile.id,
+    guestName: profile.fullName,
+    email: profile.email,
+    phone: profile.phone,
+    arrivalDate: arrivalDateFromLeadTime(profile.defaultLeadTimeDays),
+    nights: profile.defaultNights,
+    rooms: profile.defaultRooms,
+    adults: profile.defaultAdults,
+    children: profile.defaultChildren,
+    babies: profile.defaultBabies,
+    roomPlanId: profile.defaultRoomPlanId,
+    breakfastIncluded: profile.defaultBreakfastIncluded,
+    airportPickup: profile.defaultAirportPickup,
+    needParking: profile.defaultNeedParking,
+    accessibilityRequest: profile.defaultAccessibilityRequest,
+    visitPurpose: profile.defaultPurpose,
+    paymentChoice: profile.defaultPaymentChoice,
+    specialRequestNote: profile.defaultSpecialRequestNote,
+  };
+}
+
+export function arrivalDateFromLeadTime(days: number) {
+  const date = new Date();
+  date.setHours(12, 0, 0, 0);
+  date.setDate(date.getDate() + Math.max(Math.round(days), 0));
+  return date.toISOString().slice(0, 10);
+}
+
 export function getRoomPlan(hotel: Hotel, roomPlanId: string) {
   const fallbackRooms = hotels.find((item) => item.id === hotel.id)?.roomPlans ?? hotels[0].roomPlans;
   const roomPlans = hotel.roomPlans?.length ? hotel.roomPlans : fallbackRooms;
@@ -355,7 +547,9 @@ export function toApiBooking(form: BookingForm, hotel: Hotel) {
   const children = Math.max(Number(form.children) || 0, 0);
   const babies = Math.max(Number(form.babies) || 0, 0);
   const weekendNights = countWeekendNights(form.arrivalDate, nights);
-  const marketSegment = deriveMarketSegment(form, hotel);
+  const marketSegment = profile.systemMarketSegment || deriveMarketSegment(form, hotel);
+  const distributionChannel =
+    profile.systemDistributionChannel || (marketSegment === "Direct" ? "Direct" : "TA/TO");
 
   return {
     hotel: hotel.type,
@@ -372,17 +566,17 @@ export function toApiBooking(form: BookingForm, hotel: Hotel) {
     meal: form.breakfastIncluded ? "BB" : "SC",
     country: profile.country,
     market_segment: marketSegment,
-    distribution_channel: marketSegment === "Direct" ? "Direct" : "TA/TO",
+    distribution_channel: distributionChannel,
     is_repeated_guest: profile.previousBookingsNotCanceled > 0 ? 1 : 0,
     previous_cancellations: profile.previousCancellations,
     previous_bookings_not_canceled: profile.previousBookingsNotCanceled,
     reserved_room_type: roomPlan.roomType,
     booking_changes: form.accessibilityRequest || form.specialRequestNote.trim() ? 1 : 0,
     deposit_type: paymentToDeposit(form.paymentChoice),
-    agent: marketSegment === "Direct" ? 0 : 9,
-    company: marketSegment === "Corporate" ? 40 : 0,
+    agent: profile.systemAgent,
+    company: profile.systemCompany,
     days_in_waiting_list: form.paymentChoice === "refundable_deposit" ? 1 : 0,
-    customer_type: deriveCustomerType(form),
+    customer_type: profile.systemCustomerType || deriveCustomerType(form),
     adr: roomPlan.price * rooms,
     required_car_parking_spaces: form.needParking ? rooms : 0,
     total_of_special_requests: countSpecialRequests(form),

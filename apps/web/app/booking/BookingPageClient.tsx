@@ -32,13 +32,18 @@ import {
   Hotel,
   PredictionResponse,
   RoomPlan,
+  TravelerProfile,
+  applyTravelerProfileDefaults,
+  arrivalDateFromLeadTime,
   bookingTotal,
   formatStayDate,
+  getTravelerProfile,
   getRoomPlan,
   hotels,
   initialBookingForm,
   money,
   toApiBooking,
+  travelerProfiles,
 } from "@/lib/booking";
 import {
   addDaysISO,
@@ -86,22 +91,26 @@ export default function BookingPageClient({
   initialChildren,
   initialRooms,
 }: BookingPageClientProps) {
-  const initialHotel = getInitialHotel(initialRoom);
-  const checkIn = isISODate(initialCheckIn) ? initialCheckIn : initialBookingForm.arrivalDate;
-  const nights = initialCheckOut && isISODate(initialCheckOut) ? Math.max(differenceInDays(checkIn, initialCheckOut), 1) : 3;
+  const initialProfile = getTravelerProfile(initialBookingForm.travelerProfileId);
+  const initialHotel = getInitialHotel(initialRoom ?? initialProfile.defaultHotelId);
+  const checkIn = isISODate(initialCheckIn) ? initialCheckIn : arrivalDateFromLeadTime(initialProfile.defaultLeadTimeDays);
+  const nights =
+    initialCheckOut && isISODate(initialCheckOut)
+      ? Math.max(differenceInDays(checkIn, initialCheckOut), 1)
+      : initialProfile.defaultNights;
+  const initialRoomPlanId = getInitialRoomPlanId(initialHotel, initialProfile.defaultRoomPlanId);
   const [step, setStep] = useState<WizardStep>(1);
   const [selectedHotelId, setSelectedHotelId] = useState(initialHotel.id);
-  const [selectedAddOnIds, setSelectedAddOnIds] = useState<string[]>(["airport-pickup"]);
+  const [selectedAddOnIds, setSelectedAddOnIds] = useState<string[]>(initialProfile.defaultAddOnIds);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [form, setForm] = useState<BookingForm>({
-    ...initialBookingForm,
-    airportPickup: true,
+    ...applyTravelerProfileDefaults(initialBookingForm, initialProfile),
     arrivalDate: checkIn,
     nights,
-    rooms: clampNumber(initialRooms, 1, 4, initialBookingForm.rooms),
-    adults: clampNumber(initialAdults, 1, 4, initialBookingForm.adults),
-    children: clampNumber(initialChildren, 0, 3, initialBookingForm.children),
-    roomPlanId: initialHotel.roomPlans[0].id,
+    rooms: clampNumber(initialRooms, 1, 4, initialProfile.defaultRooms),
+    adults: clampNumber(initialAdults, 1, 6, initialProfile.defaultAdults),
+    children: clampNumber(initialChildren, 0, 3, initialProfile.defaultChildren),
+    roomPlanId: initialRoomPlanId,
   });
   const [confirmedBooking, setConfirmedBooking] = useState<BookingRecord | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -111,6 +120,7 @@ export default function BookingPageClient({
     () => hotels.find((hotel) => hotel.id === selectedHotelId) ?? hotels[0],
     [selectedHotelId],
   );
+  const selectedProfile = useMemo(() => getTravelerProfile(form.travelerProfileId), [form.travelerProfileId]);
   const selectedRoom = useMemo(() => getRoomPlan(selectedHotel, form.roomPlanId), [form.roomPlanId, selectedHotel]);
   const checkoutDate = useMemo(() => getCheckoutISO(form.arrivalDate, form.nights), [form.arrivalDate, form.nights]);
   const selectedAddOns = useMemo(
@@ -124,6 +134,19 @@ export default function BookingPageClient({
 
   function selectRoom(roomPlanId: string) {
     setForm((current) => ({ ...current, roomPlanId }));
+  }
+
+  function selectTravelerProfile(profileId: string) {
+    const profile = getTravelerProfile(profileId);
+    const profileHotel = hotels.find((hotel) => hotel.id === profile.defaultHotelId) ?? selectedHotel;
+
+    setSelectedHotelId(profileHotel.id);
+    setSelectedAddOnIds(profile.defaultAddOnIds);
+    setForm((current) => ({
+      ...applyTravelerProfileDefaults(current, profile),
+      roomPlanId: getInitialRoomPlanId(profileHotel, profile.defaultRoomPlanId),
+    }));
+    setStatusText("");
   }
 
   function setCheckoutDate(value: string) {
@@ -244,9 +267,12 @@ export default function BookingPageClient({
           grandTotal={grandTotal}
           onAcceptTerms={setAcceptedTerms}
           onContinue={continueToRoomSelection}
+          onSelectTravelerProfile={selectTravelerProfile}
           onSetCheckoutDate={setCheckoutDate}
           onSetForm={setForm}
+          profiles={travelerProfiles}
           room={selectedRoom}
+          selectedProfile={selectedProfile}
           selectedHotel={selectedHotel}
           statusText={statusText}
         />
@@ -313,9 +339,12 @@ function StepGuestStay({
   grandTotal,
   onAcceptTerms,
   onContinue,
+  onSelectTravelerProfile,
   onSetCheckoutDate,
   onSetForm,
+  profiles,
   room,
+  selectedProfile,
   selectedHotel,
   statusText,
 }: {
@@ -325,9 +354,12 @@ function StepGuestStay({
   grandTotal: number;
   onAcceptTerms: (value: boolean) => void;
   onContinue: () => void;
+  onSelectTravelerProfile: (profileId: string) => void;
   onSetCheckoutDate: (value: string) => void;
   onSetForm: React.Dispatch<React.SetStateAction<BookingForm>>;
+  profiles: TravelerProfile[];
   room: RoomPlan;
+  selectedProfile: TravelerProfile;
   selectedHotel: Hotel;
   statusText: string;
 }) {
@@ -335,6 +367,28 @@ function StepGuestStay({
     <section className="wizardTwoColumn">
       <article className="wizardPanel guestStayPanel">
         <h2>Guest Information</h2>
+        <label className="wizardField wizardSelectField profileSelectField">
+          <span>Registered Guest</span>
+          <select value={form.travelerProfileId} onChange={(event) => onSelectTravelerProfile(event.target.value)}>
+            {profiles.map((profile) => (
+              <option key={profile.id} value={profile.id}>
+                {profile.fullName} - {profile.riskScenario} risk test
+              </option>
+            ))}
+          </select>
+        </label>
+        <article className={`demoRiskCard ${selectedProfile.riskScenario.toLowerCase()}`}>
+          <div>
+            <span>{selectedProfile.loyaltyTier}</span>
+            <strong>{selectedProfile.riskScenario} Risk Test Profile</strong>
+            <p>{selectedProfile.riskSummary}</p>
+          </div>
+          <ul>
+            {selectedProfile.riskCriteria.map((criterion) => (
+              <li key={criterion}>{criterion}</li>
+            ))}
+          </ul>
+        </article>
         <div className="wizardFormGrid twoColumns">
           <WizardTextField
             label="Full Name"
@@ -367,7 +421,7 @@ function StepGuestStay({
           <WizardSelectField
             label="Adults"
             onChange={(value) => onSetForm((current) => ({ ...current, adults: Number(value) }))}
-            options={["1", "2", "3", "4"]}
+            options={["1", "2", "3", "4", "5", "6"]}
             value={String(form.adults)}
           />
           <WizardSelectField
@@ -398,7 +452,13 @@ function StepGuestStay({
         {statusText ? <p className="wizardStatus">{statusText}</p> : null}
       </article>
 
-      <BookingSummaryCard form={form} grandTotal={grandTotal} room={room} selectedHotel={selectedHotel} />
+      <BookingSummaryCard
+        form={form}
+        grandTotal={grandTotal}
+        profile={selectedProfile}
+        room={room}
+        selectedHotel={selectedHotel}
+      />
     </section>
   );
 }
@@ -610,7 +670,19 @@ function StepConfirm({
   );
 }
 
-function BookingSummaryCard({ form, grandTotal, room, selectedHotel }: { form: BookingForm; grandTotal: number; room: RoomPlan; selectedHotel: Hotel }) {
+function BookingSummaryCard({
+  form,
+  grandTotal,
+  profile,
+  room,
+  selectedHotel,
+}: {
+  form: BookingForm;
+  grandTotal: number;
+  profile: TravelerProfile;
+  room: RoomPlan;
+  selectedHotel: Hotel;
+}) {
   return (
     <aside className="wizardPanel bookingSummaryPanel">
       <h2>Your Booking Summary</h2>
@@ -639,6 +711,16 @@ function BookingSummaryCard({ form, grandTotal, room, selectedHotel }: { form: B
       <article className="riskInfoBox">
         <Info size={26} />
         <p>After you confirm your booking, our system will analyze the cancellation risk automatically.</p>
+      </article>
+
+      <article className={`demoSignalSummary ${profile.riskScenario.toLowerCase()}`}>
+        <span>System-filled criteria</span>
+        <strong>{profile.riskScenario} risk scenario</strong>
+        <ul>
+          {profile.riskCriteria.slice(0, 4).map((criterion) => (
+            <li key={criterion}>{criterion}</li>
+          ))}
+        </ul>
       </article>
     </aside>
   );
@@ -804,6 +886,10 @@ function ConfirmationRow({ label, value, strong = false }: { label: string; valu
 
 function getInitialHotel(roomId?: string) {
   return hotels.find((hotel) => hotel.id === roomId) ?? hotels[0];
+}
+
+function getInitialRoomPlanId(hotel: Hotel, roomPlanId: string) {
+  return hotel.roomPlans.some((plan) => plan.id === roomPlanId) ? roomPlanId : hotel.roomPlans[0].id;
 }
 
 function isISODate(value?: string): value is string {

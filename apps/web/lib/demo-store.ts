@@ -71,10 +71,11 @@ export function countRiskLevels(records: BookingRecord[]): Record<RiskLevel, num
 
 export function computeRiskFactors(records: BookingRecord[]) {
   const denominator = Math.max(records.length, 1);
+  const apiBookings = records.map((record) => toApiBooking(record.booking, record.hotel));
   const factors = [
     {
       label: "Lead Time (14+ days)",
-      count: records.filter((record) => Number(toApiBooking(record.booking, record.hotel).lead_time) >= 14).length,
+      count: apiBookings.filter((booking) => Number(booking.lead_time) >= 14).length,
     },
     {
       label: "Previous Cancellations",
@@ -83,15 +84,15 @@ export function computeRiskFactors(records: BookingRecord[]) {
     },
     {
       label: "Deposit Type (No Deposit)",
-      count: records.filter((record) => record.booking.paymentChoice === "pay_at_property").length,
+      count: apiBookings.filter((booking) => booking.deposit_type === "No Deposit").length,
     },
     {
       label: "Market Segment (OTA)",
-      count: records.filter((record) => record.hotel.marketSegment === "Online TA").length,
+      count: apiBookings.filter((booking) => booking.market_segment === "Online TA").length,
     },
     {
       label: "Changes in Booking",
-      count: records.filter((record) => Boolean(record.booking.specialRequestNote.trim())).length,
+      count: apiBookings.filter((booking) => Number(booking.booking_changes) > 0).length,
     },
   ];
 
@@ -102,12 +103,13 @@ export function getRecordRiskFactors(record: BookingRecord) {
   const apiBooking = toApiBooking(record.booking, record.hotel);
   const factors = [
     Number(apiBooking.lead_time) >= 14 ? `Lead time is ${apiBooking.lead_time} days` : "",
-    record.booking.paymentChoice === "pay_at_property" ? "No deposit payment" : "",
+    apiBooking.deposit_type === "No Deposit" ? "No deposit payment" : "",
     getTravelerProfile(record.booking.travelerProfileId).previousCancellations > 0
       ? "Customer has previous cancellations"
       : "",
-    record.hotel.marketSegment === "Online TA" ? "Booked through Online Travel Agent" : "",
-    record.booking.specialRequestNote.trim() ? "Guest submitted a special request" : "",
+    apiBooking.market_segment === "Online TA" ? "Booked through Online Travel Agent" : "",
+    apiBooking.market_segment === "Groups" ? "Group reservation" : "",
+    Number(apiBooking.booking_changes) > 0 ? "Guest submitted a special request or change" : "",
   ].filter(Boolean);
 
   return factors.length ? factors : record.prediction.insights.slice(0, 5);
@@ -225,18 +227,18 @@ function toISODate(date: Date) {
 
 function createSeedBookingRecords(): BookingRecord[] {
   const seedData = [
-    ["BK-10292", "Sinta Dewi", "sinta", "deluxe-room", "2026-09-21", 2, 2, 1, "pay_at_property", "family", 0.87],
-    ["BK-10291", "Rudi Hartono", "andi", "suite-room", "2026-09-22", 3, 2, 0, "pay_at_property", "leisure", 0.83],
-    ["BK-10290", "Dewi Lestari", "sinta", "executive-room", "2026-09-24", 2, 3, 1, "pay_at_property", "family", 0.82],
-    ["BK-10289", "Budi Santoso", "andi", "deluxe-room", "2026-09-24", 1, 2, 0, "pay_at_property", "leisure", 0.8],
-    ["BK-10288", "Maya Wicaksono", "maya", "executive-room", "2026-09-25", 4, 1, 0, "refundable_deposit", "business", 0.62],
-    ["BK-10287", "Nadia Larasati", "andi", "suite-room", "2026-09-20", 2, 2, 0, "refundable_deposit", "leisure", 0.57],
-    ["BK-10286", "Arman Hakim", "maya", "executive-room", "2026-09-23", 2, 1, 0, "pay_now", "business", 0.39],
-    ["BK-10285", "Raisa Putri", "andi", "deluxe-room", "2026-09-26", 3, 2, 0, "pay_now", "leisure", 0.28],
-    ["BK-10284", "Bagas Wirawan", "andi", "suite-room", "2026-09-20", 1, 2, 1, "refundable_deposit", "family", 0.48],
-    ["BK-10283", "Ayu Permata", "maya", "executive-room", "2026-09-19", 2, 1, 0, "pay_now", "business", 0.24],
-    ["BK-10282", "Dimas Nugroho", "sinta", "deluxe-room", "2026-09-18", 2, 2, 1, "pay_at_property", "family", 0.73],
-    ["BK-10281", "Fajar Ramadhan", "andi", "suite-room", "2026-09-17", 3, 2, 0, "refundable_deposit", "leisure", 0.45],
+    ["BK-10292", "Sinta Dewi", "sinta", "deluxe-room", "2026-09-21", 5, 2, 1, "pay_at_property", "family", 0.87],
+    ["BK-10291", "Rudi Hartono", "rudi", "suite-room", "2026-09-22", 6, 6, 0, "pay_at_property", "group", 0.83],
+    ["BK-10290", "Nadia Larasati", "nadia", "suite-room", "2026-09-24", 3, 2, 0, "refundable_deposit", "leisure", 0.57],
+    ["BK-10289", "Maya Wicaksono", "maya", "executive-room", "2026-09-25", 2, 1, 0, "refundable_deposit", "business", 0.28],
+    ["BK-10288", "Andi Pratama", "andi", "deluxe-room", "2026-09-26", 2, 2, 0, "refundable_deposit", "leisure", 0.24],
+    ["BK-10287", "Rudi Hartono", "rudi", "suite-room", "2026-09-20", 6, 6, 0, "pay_at_property", "group", 0.81],
+    ["BK-10286", "Sinta Dewi", "sinta", "deluxe-room", "2026-09-23", 5, 2, 1, "pay_at_property", "family", 0.76],
+    ["BK-10285", "Nadia Larasati", "nadia", "suite-room", "2026-09-20", 3, 2, 0, "refundable_deposit", "leisure", 0.49],
+    ["BK-10284", "Maya Wicaksono", "maya", "executive-room", "2026-09-23", 2, 1, 0, "refundable_deposit", "business", 0.22],
+    ["BK-10283", "Andi Pratama", "andi", "deluxe-room", "2026-09-24", 2, 2, 0, "refundable_deposit", "leisure", 0.18],
+    ["BK-10282", "Sinta Dewi", "sinta", "deluxe-room", "2026-09-18", 5, 2, 1, "pay_at_property", "family", 0.73],
+    ["BK-10281", "Nadia Larasati", "nadia", "suite-room", "2026-09-17", 3, 2, 0, "refundable_deposit", "leisure", 0.45],
   ] as const;
 
   return seedData.map(
@@ -252,20 +254,22 @@ function createSeedBookingRecords(): BookingRecord[] {
           ...initialBookingForm,
           travelerProfileId,
           guestName,
-          email: profile.email.replace(
-            profile.fullName.toLowerCase().replaceAll(" ", "."),
-            guestName.toLowerCase().replaceAll(" ", "."),
-          ),
+          email: profile.email,
           phone: profile.phone,
           arrivalDate,
           nights,
+          rooms: profile.defaultRooms,
           adults,
           children,
-          roomPlanId: hotel.roomPlans[0].id,
-          breakfastIncluded: true,
+          babies: profile.defaultBabies,
+          roomPlanId: profile.defaultHotelId === hotel.id ? profile.defaultRoomPlanId : hotel.roomPlans[0].id,
+          breakfastIncluded: profile.defaultBreakfastIncluded,
+          airportPickup: profile.defaultAirportPickup,
+          needParking: profile.defaultNeedParking,
+          accessibilityRequest: profile.defaultAccessibilityRequest,
           paymentChoice,
           visitPurpose,
-          specialRequestNote: probability > 0.6 ? "Late check-in around 10 PM." : "",
+          specialRequestNote: profile.defaultSpecialRequestNote,
         },
         prediction: createPrediction(probability),
         featureCount: 77,
