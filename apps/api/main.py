@@ -1,10 +1,4 @@
-"""Production-ready FastAPI service for hotel booking cancellation prediction.
-
-The API accepts both processed model features and business-friendly booking
-fields. Raw booking inputs are transformed into the 77-feature model schema
-before inference, so the web dashboard does not need to expose internal
-preprocessing columns to hotel staff.
-"""
+"""FastAPI service for hotel booking cancellation prediction."""
 
 from __future__ import annotations
 
@@ -24,7 +18,7 @@ from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, ge
 
 try:
     import psutil
-except ImportError:  # pragma: no cover - system metrics are optional.
+except ImportError:
     psutil = None
 
 
@@ -115,14 +109,14 @@ class ProcessedPredictionRequest(BaseModel):
 
 
 class RawBookingRequest(BaseModel):
-    """Business-friendly booking payload used by the dashboard."""
+    """Booking payload used by the customer and staff flows."""
 
     booking: dict[str, Any] | None = Field(default=None)
     bookings: list[dict[str, Any]] | None = Field(default=None)
 
 
 class PredictionResponse(BaseModel):
-    """Standard API response for model inference."""
+    """Model inference response."""
 
     predictions: list[dict[str, Any]]
     model_source: str
@@ -454,7 +448,7 @@ try:
     model, feature_columns, label_mapping, model_source = load_model()
     model_load_error = ""
     MODEL_LOADED.set(1)
-except Exception as exc:  # pragma: no cover - visible through /health in deployment.
+except Exception as exc:
     model = None
     feature_columns = []
     label_mapping = {"0": "not_canceled", "1": "canceled"}
@@ -508,7 +502,7 @@ def health() -> dict[str, Any]:
 def booking_schema() -> dict[str, Any]:
     REQUEST_COUNT.labels(endpoint="/booking-schema", method="GET", status="200").inc()
     return {
-        "description": "Recommended raw fields for the staff dashboard. Missing fields use safe defaults.",
+        "description": "Raw booking fields accepted by /predict-booking.",
         "required_for_demo": [
             "lead_time",
             "arrival_date_month",

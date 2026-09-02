@@ -17,7 +17,7 @@ Tambahkan variable berikut pada service Alloy di Railway:
 
 | Variable | Value |
 |---|---|
-| `HOTEL_BOOKING_METRICS_HOST` | `hotel-booking-mlops-production.up.railway.app` |
+| `HOTEL_BOOKING_METRICS_HOST` | `your-railway-api-url.up.railway.app` |
 | `HOTEL_BOOKING_METRICS_SCHEME` | `https` |
 | `HOTEL_BOOKING_METRICS_PATH` | `/metrics` |
 | `GRAFANA_CLOUD_REMOTE_WRITE_URL` | Remote write URL dari Grafana Cloud |

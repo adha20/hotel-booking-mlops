@@ -21,10 +21,9 @@ from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, ge
 
 try:
     import psutil
-except ImportError:  # pragma: no cover - system metrics are optional.
+except ImportError:
     psutil = None
 
-# Core API and prediction metrics used by Prometheus and Grafana.
 REQUEST_COUNT = Counter("hotel_booking_requests_total", "Total HTTP requests.", ["endpoint", "method", "status"])
 PREDICTION_COUNT = Counter("hotel_booking_predictions_total", "Prediction count by label.", ["label"])
 ERROR_COUNT = Counter("hotel_booking_prediction_errors_total", "Total failed prediction requests.")
@@ -36,14 +35,12 @@ INPUT_FEATURE_COUNT = Histogram("hotel_booking_input_feature_count", "Number of 
 MISSING_FEATURE_COUNT = Histogram("hotel_booking_missing_feature_count", "Number of missing features filled with zero.")
 UNKNOWN_FEATURE_COUNT = Histogram("hotel_booking_unknown_feature_count", "Number of unknown features ignored.")
 
-# Service health and host resource metrics.
 MODEL_LOADED = Gauge("hotel_booking_model_loaded", "Whether the model is loaded.")
 SYSTEM_METRICS_AVAILABLE = Gauge("hotel_booking_system_metrics_available", "Whether psutil system metrics are available.")
 CPU_USAGE = Gauge("hotel_booking_cpu_usage_percent", "Current CPU usage percentage.")
 RAM_USAGE = Gauge("hotel_booking_ram_usage_percent", "Current RAM usage percentage.")
 DISK_USAGE = Gauge("hotel_booking_disk_usage_percent", "Current disk usage percentage.")
 
-# Aggregated prediction metrics for dashboard summary panels.
 TOTAL_PREDICTIONS = Gauge("hotel_booking_total_predictions", "Total number of predictions served.")
 AVERAGE_CONFIDENCE = Gauge("hotel_booking_average_prediction_confidence_percent", "Average prediction confidence percentage.")
 AVERAGE_CANCELLATION_PROBABILITY = Gauge(
@@ -80,7 +77,6 @@ class PredictResponse(BaseModel):
     model_source: str
 
 
-# Keep the response model ready for environments using Pydantic v2.
 PredictResponse.model_rebuild()
 
 

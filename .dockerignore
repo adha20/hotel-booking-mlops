@@ -7,6 +7,9 @@
 **/*.pyc
 **/mlruns
 **/.env
+**/.env.*
+!**/.env.example
+!**/*.env.example
 
 Eksperimen_SML_Muhammad_Adha/hotel_bookings_raw
 Eksperimen_SML_Muhammad_Adha/preprocessing/hotel_bookings_preprocessing
@@ -19,3 +22,10 @@ Monitoring dan Logging/6.bukti alerting Grafana
 Monitoring dan Logging/grafana
 Workflow-CI/MLProject/hotel_bookings_preprocessing
 Workflow-CI/MLProject/training_artifacts
+
+**/node_modules
+**/.next
+**/out
+**/.env.local
+**/.env*.local
+README_SUBMISSION_SEBELUMNYA.md

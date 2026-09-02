@@ -1,134 +1,162 @@
-# Hotel Booking Cancellation Prediction - MLOps Project
+# Hotel Booking Cancellation Risk Platform
 
-End-to-end machine learning project untuk memprediksi apakah sebuah reservasi hotel berpotensi dibatalkan. Proyek ini tidak hanya berfokus pada training model, tetapi juga mencakup preprocessing otomatis, experiment tracking, CI/CD retraining, model serving, monitoring Prometheus-Grafana, dan alerting.
+Final project ini mengembangkan submission MLOps sebelumnya menjadi sistem demo end-to-end untuk prediksi risiko pembatalan booking hotel. README ini berfokus pada penambahan final project: production API, web booking berbasis Next.js, dashboard staff, deployment Railway/Vercel, monitoring Grafana Cloud, dan alerting.
 
-## Ringkasan
+## Ringkasan Proyek
 
-| Item | Keterangan |
+| Area | Keterangan |
 |---|---|
-| Use case | Prediksi pembatalan booking hotel |
-| Task | Binary classification |
+| Use case | Prediksi risiko pembatalan reservasi hotel |
+| Task ML | Binary classification |
 | Target | `is_canceled` |
-| Dataset | `hotel_bookings.csv` |
-| Model baseline | Logistic Regression + MLflow autolog |
-| Model tuning | Random Forest + manual MLflow logging |
-| Best accuracy | 87.81% |
-| Best weighted F1 | 87.89% |
-| Tracking | MLflow local dan DagsHub |
-| Deployment artifact | `model.joblib`, MLflow model, Docker image |
-| Monitoring | FastAPI, Prometheus, Grafana |
+| Dataset | Hotel Booking Demand |
+| Model final | Random Forest tuned |
+| Jumlah fitur model | 77 fitur |
+| API serving | FastAPI |
+| API deployment | Railway |
+| Frontend | Next.js App Router |
+| Frontend deployment target | Vercel |
+| Monitoring | Prometheus metrics, Grafana Cloud, Grafana Alloy |
+| Alerting | Grafana alert rules untuk latency, error rate, dan traffic |
 
-## Problem Statement
+## Tujuan Final Project
 
-Pembatalan reservasi dapat berdampak langsung pada pendapatan hotel, alokasi kamar, strategi overbooking, dan perencanaan operasional. Jika potensi pembatalan dapat diprediksi lebih awal, tim operasional dapat mengambil tindakan seperti penyesuaian inventory, promosi ulang kamar, atau prioritas follow-up pada booking berisiko tinggi.
+Proyek ini tidak berhenti di training model. Sistem dibuat agar model bisa dipakai dalam alur bisnis yang lebih realistis:
 
-## Objective
+1. User memilih hotel, tanggal, jumlah tamu, kamar, dan add-ons melalui UI booking.
+2. Sistem melengkapi field teknis yang tidak perlu diketahui user.
+3. Frontend mengirim payload booking ke API model yang berjalan di Railway.
+4. Backend mengubah payload booking menjadi schema 77 fitur model.
+5. Model mengembalikan probability pembatalan, risk level, confidence, insight, dan rekomendasi.
+6. Staff melihat booking terbaru, distribusi risiko, trend, faktor risiko, dan detail booking.
+7. API diekspos ke Prometheus metrics, dikirim ke Grafana Cloud melalui Alloy, lalu dipakai untuk dashboard dan alerting.
 
-Tujuan proyek ini adalah membangun pipeline machine learning yang mampu:
-
-1. Mengolah dataset booking hotel menjadi data siap latih.
-2. Melatih model klasifikasi untuk memprediksi booking `canceled` atau `not_canceled`.
-3. Mencatat eksperimen, parameter, metrik, model, dan artifact menggunakan MLflow.
-4. Menyediakan workflow CI untuk retraining dan build Docker image.
-5. Melakukan serving model melalui API dan memonitor performanya dengan Prometheus-Grafana.
-
-## Dataset
-
-Dataset yang digunakan adalah **Hotel Booking Demand** dari Kaggle.
-
-Sumber dataset: [Hotel Booking Demand - Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand)
-
-File lokal yang digunakan:
+## Arsitektur Sistem
 
 ```text
-Eksperimen_SML_Muhammad_Adha/hotel_bookings_raw/hotel_bookings.csv
+Customer Web UI (Next.js, Vercel-ready)
+        |
+        | POST /api/predict-booking
+        v
+Next.js API Proxy
+        |
+        | POST Railway API /predict-booking
+        v
+FastAPI Model Service (Railway)
+        |
+        | transform_raw_booking()
+        v
+77-feature model frame
+        |
+        v
+Random Forest model.joblib
+        |
+        v
+Prediction response
+        |
+        +--> Customer confirmation page
+        +--> Staff dashboard and booking detail page
+
+FastAPI /metrics
+        |
+        v
+Grafana Alloy on Railway
+        |
+        v
+Grafana Cloud Prometheus
+        |
+        v
+Dashboard and alerting
 ```
 
-Target prediksi:
+## Fitur Utama
 
-| Label | Arti |
+### Public Booking Website
+
+Frontend customer berada di `apps/web`.
+
+Fitur yang tersedia:
+
+- Halaman publik hotel booking dengan hero, search filter, dan kartu hotel.
+- Filter tanggal check-in, check-out, guests, rooms, dan hotel.
+- Card hotel interaktif dengan hover lift effect.
+- Klik hotel membuka halaman booking terpisah.
+- Booking wizard 3 tahap:
+  - Guest & Stay Info
+  - Room & Add-ons
+  - Confirmation
+- Halaman sukses booking yang compact dan minimalis.
+- Booking baru disimpan ke `localStorage` untuk kebutuhan demo staff dashboard.
+
+Route frontend utama:
+
+| Route | Fungsi |
 |---|---|
-| `0` | Booking tidak dibatalkan |
-| `1` | Booking dibatalkan |
+| `/` | Public booking website |
+| `/booking` | Customer booking wizard |
+| `/staff` | Staff dashboard overview |
+| `/staff/bookings/[bookingId]` | Detail booking staff |
+| `/api/predict-booking` | Proxy dari Next.js ke Railway API |
+| `/api/health` | Proxy health check ke Railway API |
 
-Setelah cleaning, dataset berisi:
+### Staff Dashboard
 
-| Split | Jumlah baris |
+Dashboard staff dibuat seperti operational dashboard, bukan landing page.
+
+Fitur yang tersedia:
+
+- Summary total bookings, high risk, medium risk, dan low risk.
+- Filter rentang tanggal.
+- Filter risk level.
+- Risk distribution donut chart.
+- Cancellation risk trend chart.
+- Tabel bookings dengan scroll internal.
+- Klik booking ID membuka halaman detail booking.
+- Detail booking berisi guest information, stay information, booking information, cancellation risk, room summary, price summary, risk factors, dan action recommendations.
+
+Data staff dashboard berasal dari:
+
+- Seed demo bookings di `apps/web/lib/demo-store.ts`.
+- Booking baru dari customer flow yang disimpan di browser `localStorage`.
+
+Catatan: untuk demo final project, data booking belum memakai database server-side. Ini sengaja dibuat ringan agar mudah dipresentasikan dan dideploy.
+
+## Model Machine Learning
+
+Model berasal dari submission sebelumnya dan tetap menjadi basis final project.
+
+| Komponen | Keterangan |
+|---|---|
+| Raw dataset | `Eksperimen_SML_Muhammad_Adha/hotel_bookings_raw/hotel_bookings.csv` |
+| Preprocessing | `Eksperimen_SML_Muhammad_Adha/preprocessing/automate_Muhammad_Adha.py` |
+| Training baseline | `Membangun_model/modelling.py` |
+| Training tuning | `Membangun_model/modelling_tuning.py` |
+| Model artifact | `Membangun_model/model_output_tuned/model.joblib` |
+| Feature schema | `Membangun_model/model_output_tuned/feature_columns.json` |
+| Label mapping | `Membangun_model/model_output_tuned/label_mapping.json` |
+
+Dataset setelah cleaning:
+
+| Split | Jumlah |
 |---|---:|
 | Train | 95.368 |
 | Test | 23.842 |
 | Total | 119.210 |
 
-Jumlah fitur akhir setelah preprocessing: **77 fitur**.
+Hasil model Random Forest tuned:
 
-Kolom berikut dihapus karena berisiko menyebabkan data leakage:
+| Metrik | Nilai |
+|---|---:|
+| Accuracy | 0.8781 |
+| Precision canceled | 0.8140 |
+| Recall canceled | 0.8700 |
+| F1 canceled | 0.8411 |
+| F1 macro | 0.8711 |
+| F1 weighted | 0.8789 |
+| ROC AUC | 0.9543 |
+| Log loss | 0.2688 |
 
-- `reservation_status`
-- `reservation_status_date`
-- `assigned_room_type`
-
-## Metodologi
-
-Pipeline utama proyek:
-
-```text
-Raw dataset
--> EDA
--> Cleaning dan feature engineering
--> One-hot encoding
--> Stratified train-test split
--> Baseline modelling dengan MLflow autolog
--> Hyperparameter tuning dengan manual MLflow logging
--> Export artifact model
--> CI retraining dengan MLflow Project
--> Docker image build
--> Serving API
--> Monitoring dan alerting
-```
-
-### Preprocessing
-
-Preprocessing dilakukan secara otomatis melalui:
-
-```text
-Eksperimen_SML_Muhammad_Adha/preprocessing/automate_Muhammad_Adha.py
-```
-
-Tahapan utama:
-
-- Mengisi missing values pada `children`, `country`, `agent`, dan `company`.
-- Menghapus booking tidak valid dengan jumlah tamu `0`.
-- Mengubah bulan kedatangan menjadi angka.
-- Membuat fitur turunan seperti `total_guests`, `total_stays`, `has_children`, `has_agent`, dan `has_company`.
-- Mengelompokkan negara dengan frekuensi rendah ke kategori `Other`.
-- Melakukan log transform untuk fitur numerik yang long-tailed.
-- Melakukan one-hot encoding untuk fitur kategorikal.
-- Menyimpan `train.csv`, `test.csv`, `feature_columns.json`, `label_mapping.json`, dan `dataset_info.json`.
-
-Jalankan preprocessing:
-
-```powershell
-cd Eksperimen_SML_Muhammad_Adha/preprocessing
-python automate_Muhammad_Adha.py --input ../hotel_bookings_raw/hotel_bookings.csv --output hotel_bookings_preprocessing
-```
-
-## Modelling
-
-Folder modelling:
-
-```text
-Membangun_model/
-```
-
-File utama:
-
-| File | Fungsi |
-|---|---|
-| `modelling.py` | Baseline Logistic Regression dengan `mlflow.sklearn.autolog()` |
-| `modelling_tuning.py` | Random Forest tuning dengan manual MLflow logging |
-| `run_dagshub_tuning.ps1` | Menjalankan tuning dan logging ke DagsHub |
-
-Model tuning menggunakan Random Forest dengan parameter terbaik:
+Best parameters:
 
 ```json
 {
@@ -140,183 +168,168 @@ Model tuning menggunakan Random Forest dengan parameter terbaik:
 }
 ```
 
-## Hasil Eksperimen
+## Alur Input User ke 77 Fitur Model
 
-Hasil model Random Forest tuned berdasarkan metrik yang tercatat di MLflow/DagsHub:
+UI customer tidak menampilkan field teknis seperti `previous_cancellations`, `agent`, `company`, atau `market_segment`. User hanya mengisi informasi yang masuk akal di dunia booking hotel. Sistem kemudian menurunkan field teknis tersebut.
 
-| Metrik | Nilai |
-|---|---:|
-| Accuracy | 0.8781142521600537 |
-| Best CV F1 | 0.8377677549222015 |
-| F1 canceled | 0.8410979877515311 |
-| F1 macro | 0.871120500203157 |
-| F1 weighted | 0.8788798627451803 |
-| Log loss | 0.2687755650032006 |
-| Precision canceled | 0.814034716342083 |
-| Recall canceled | 0.8700226244343892 |
-| ROC AUC | 0.9543256713584495 |
+### Field yang Diisi User
 
-Artifact yang dicatat:
+Field ini berasal dari booking form:
 
-- model artifact
-- confusion matrix
-- classification report
-- feature importance
-- CV results
-- best parameters
-- sample predictions
+- Nama tamu
+- Email
+- Nomor telepon
+- Check-in date
+- Check-out date
+- Jumlah adults
+- Jumlah children
+- Jumlah rooms
+- Hotel yang dipilih
+- Room plan
+- Add-ons
+- Special request
+- Terms agreement
 
-Tracking online:
+Tidak semua field ini dikirim langsung ke model. Nama, email, dan phone dipakai untuk display booking dan staff dashboard, bukan sebagai fitur ML.
+
+### Field yang Dibuat Frontend
+
+Frontend memakai fungsi `toApiBooking()` di:
 
 ```text
-https://dagshub.com/adha20/SMSML_Muhammad_Adha
+apps/web/lib/booking.ts
 ```
 
-## Export Model
+Fungsi ini mengubah form user menjadi payload booking bisnis untuk API.
 
-Model hasil tuning disimpan sebagai:
+Contoh field yang dibuat frontend:
+
+| Field API | Cara sistem mengisi |
+|---|---|
+| `hotel` | Dari tipe hotel yang dipilih, misalnya `City Hotel` atau `Resort Hotel` |
+| `lead_time` | Selisih tanggal hari ini dengan tanggal check-in |
+| `arrival_date_year` | Tahun dari check-in date |
+| `arrival_date_month` | Nama bulan dari check-in date |
+| `arrival_date_week_number` | Nomor minggu dari check-in date |
+| `arrival_date_day_of_month` | Tanggal dalam bulan dari check-in date |
+| `stays_in_weekend_nights` | Jumlah malam weekend dari durasi stay |
+| `stays_in_week_nights` | Jumlah malam weekday dari durasi stay |
+| `adults` | Dari form user |
+| `children` | Dari form user |
+| `babies` | Default `0` |
+| `meal` | `BB` jika breakfast aktif, selain itu `SC` |
+| `country` | Dari profil user demo/database |
+| `market_segment` | Dari purpose, jumlah rooms, jumlah guest, atau default hotel |
+| `distribution_channel` | `Direct` jika market segment direct, selain itu `TA/TO` |
+| `is_repeated_guest` | Dari history profil user |
+| `previous_cancellations` | Dari history profil user |
+| `previous_bookings_not_canceled` | Dari history profil user |
+| `reserved_room_type` | Dari room plan yang dipilih |
+| `booking_changes` | Aktif jika ada special request atau accessibility request |
+| `deposit_type` | Mapping dari pilihan payment |
+| `agent` | `0` untuk direct, `9` untuk TA/TO |
+| `company` | `40` untuk corporate, selain itu `0` |
+| `days_in_waiting_list` | `1` jika refundable deposit, selain itu `0` |
+| `customer_type` | Diturunkan dari purpose, jumlah guest, children, dan rooms |
+| `adr` | Harga room plan dikali jumlah room |
+| `required_car_parking_spaces` | Jumlah room jika parking diperlukan |
+| `total_of_special_requests` | Jumlah request/add-ons yang relevan, maksimum 5 |
+
+### Transformasi ke 77 Fitur
+
+Backend Railway memakai fungsi `transform_raw_booking()` di:
 
 ```text
-Membangun_model/model_output_tuned/model.joblib
+apps/api/main.py
 ```
 
-Artifact pendukung:
+Endpoint yang memanggil fungsi ini:
 
 ```text
-Membangun_model/model_output_tuned/feature_columns.json
-Membangun_model/model_output_tuned/label_mapping.json
-Membangun_model/model_output_tuned/best_params.json
+POST /predict-booking
 ```
 
-Docker image:
+Prosesnya:
+
+1. Payload raw booking digabung dengan `DEFAULT_BOOKING`.
+2. Sistem membuat dictionary berisi semua `feature_columns` dengan nilai awal `0.0`.
+3. Fitur numerik diisi dan beberapa fitur diberi `log1p`, misalnya `lead_time`, `adr`, `agent`, `company`, dan `days_in_waiting_list`.
+4. Fitur turunan dibuat:
+   - `arrival_month_number`
+   - `total_guests`
+   - `total_stays`
+   - `has_children`
+   - `has_agent`
+   - `has_company`
+5. Fitur kategorikal diubah menjadi one-hot encoding:
+   - `hotel_*`
+   - `meal_*`
+   - `market_segment_*`
+   - `distribution_channel_*`
+   - `reserved_room_type_*`
+   - `deposit_type_*`
+   - `customer_type_*`
+   - `country_group_*`
+6. DataFrame disusun ulang mengikuti `feature_columns.json`.
+7. Model menjalankan `predict()` dan `predict_proba()`.
+
+Dengan desain ini, frontend tetap manusiawi untuk user, sementara backend tetap kompatibel dengan schema model 77 fitur.
+
+## API Serving
+
+API production berada di:
 
 ```text
-adha20/hotel-booking-cancellation:latest
-```
-
-Docker Hub:
-
-```text
-https://hub.docker.com/r/adha20/hotel-booking-cancellation
-```
-
-## CI/CD
-
-Workflow CI berada di:
-
-```text
-Workflow-CI/.github/workflows/train.yml
-```
-
-Workflow menjalankan:
-
-1. Setup Python.
-2. Install dependency.
-3. Run MLflow Project.
-4. Simpan artifact training.
-5. Build Docker image dari MLflow model.
-6. Push image ke Docker Hub.
-
-Repository CI:
-
-```text
-https://github.com/adha20/Workflow-CI
-```
-
-Workflow CD API tambahan berada di:
-
-```text
-.github/workflows/api-cd.yml
-```
-
-Workflow ini membangun Docker image khusus FastAPI untuk web dashboard dan dapat melakukan deploy otomatis ke Railway jika secret Railway sudah dikonfigurasi.
-
-Docker image API:
-
-```text
-adha20/hotel-booking-api:latest
-```
-
-Secret yang dibutuhkan untuk CD Railway:
-
-```text
-DOCKERHUB_USERNAME
-DOCKERHUB_TOKEN
-RAILWAY_TOKEN
-RAILWAY_PROJECT_ID
-RAILWAY_ENVIRONMENT
-RAILWAY_SERVICE
-```
-
-## Serving dan Monitoring
-
-Serving API menggunakan FastAPI:
-
-```text
-Monitoring dan Logging/3.prometheus_exporter.py
+apps/api
 ```
 
 Endpoint utama:
 
-| Endpoint | Fungsi |
-|---|---|
-| `/health` | Cek status API dan model |
-| `/predict` | Prediksi booking cancellation |
-| `/metrics` | Endpoint metrik Prometheus |
+| Endpoint | Method | Fungsi |
+|---|---|---|
+| `/health` | GET | Mengecek status API, model, feature count, dan system metrics |
+| `/booking-schema` | GET | Metadata field booking untuk integrasi |
+| `/sample-booking` | GET | Contoh payload raw booking |
+| `/predict-booking` | POST | Prediksi dari payload booking bisnis |
+| `/batch-predict` | POST | Prediksi banyak booking bisnis |
+| `/predict` | POST | Prediksi dari fitur processed atau sample `row_index` |
+| `/metrics` | GET | Prometheus metrics |
 
-Jalankan API:
+Contoh payload raw booking:
 
-```powershell
-cd "Monitoring dan Logging"
-python 3.prometheus_exporter.py
-```
-
-Jalankan Prometheus dan Grafana:
-
-```powershell
-docker compose up -d
-```
-
-URL lokal:
-
-| Service | URL |
-|---|---|
-| API health | `http://127.0.0.1:8000/health` |
-| API metrics | `http://127.0.0.1:8000/metrics` |
-| Prometheus | `http://localhost:9090` |
-| Grafana | `http://localhost:3001` |
-
-Dashboard Grafana bernama `muhamadadha`.
-
-Metrik utama yang dimonitor:
-
-- CPU usage
-- RAM usage
-- Disk usage
-- API latency p95
-- requests per second
-- error rate
-- total predictions
-- prediction distribution
-- average prediction confidence
-- cancellation rate
-
-Alert Grafana:
-
-- Total request atau prediction lebih dari 10.000.
-- API latency p95 lebih dari 500 ms.
-- Error rate lebih dari 5%.
-
-## Contoh Inference
-
-Contoh request dengan sample row dari `test.csv`:
-
-```powershell
-Invoke-RestMethod `
-  -Uri "http://127.0.0.1:8000/predict" `
-  -Method Post `
-  -ContentType "application/json" `
-  -Body '{"row_index": 10}'
+```json
+{
+  "booking": {
+    "hotel": "City Hotel",
+    "lead_time": 20,
+    "arrival_date_year": 2026,
+    "arrival_date_month": "September",
+    "arrival_date_week_number": 38,
+    "arrival_date_day_of_month": 20,
+    "stays_in_weekend_nights": 1,
+    "stays_in_week_nights": 2,
+    "adults": 2,
+    "children": 0,
+    "babies": 0,
+    "meal": "BB",
+    "country": "PRT",
+    "market_segment": "Online TA",
+    "distribution_channel": "TA/TO",
+    "is_repeated_guest": 1,
+    "previous_cancellations": 0,
+    "previous_bookings_not_canceled": 5,
+    "reserved_room_type": "A",
+    "booking_changes": 1,
+    "deposit_type": "No Deposit",
+    "agent": 9,
+    "company": 0,
+    "days_in_waiting_list": 0,
+    "customer_type": "Transient",
+    "adr": 85,
+    "required_car_parking_spaces": 0,
+    "total_of_special_requests": 2
+  }
+}
 ```
 
 Contoh response:
@@ -328,156 +341,358 @@ Contoh response:
       "label": 1,
       "label_name": "canceled",
       "cancellation_probability": 0.82,
-      "confidence": 0.82
+      "confidence": 0.82,
+      "risk_level": "High",
+      "recommended_action": "This booking needs staff follow-up before arrival.",
+      "insights": ["Long lead time", "No deposit payment"]
     }
   ],
-  "model_source": "model.joblib"
+  "model_source": "/app/model/model.joblib",
+  "feature_count": 77
 }
 ```
 
-Generate traffic demo untuk dashboard:
+## Monitoring dan Alerting
 
-```powershell
-python "8.generate_dashboard_demo_traffic.py" --requests 360 --sleep 0.35 --cancelled-rate 0.35
-```
+API FastAPI mengekspos `/metrics` untuk Prometheus. Metrics ini digunakan oleh dashboard dan alerting.
 
-## Struktur Folder
+Metrik penting:
+
+- `hotel_booking_requests_total`
+- `hotel_booking_predictions_total`
+- `hotel_booking_prediction_errors_total`
+- `hotel_booking_prediction_latency_seconds`
+- `hotel_booking_prediction_confidence`
+- `hotel_booking_cancellation_probability`
+- `hotel_booking_model_loaded`
+- `hotel_booking_cpu_usage_percent`
+- `hotel_booking_ram_usage_percent`
+- `hotel_booking_disk_usage_percent`
+- `hotel_booking_total_predictions`
+- `hotel_booking_cancellation_rate_percent`
+
+### Grafana Cloud via Alloy
+
+Service Alloy berada di:
 
 ```text
-SMSML_Muhammad_Adha_Hotel_Booking
-├── Eksperimen_SML_Muhammad_Adha
-│   ├── .github/workflows
-│   ├── hotel_bookings_raw
-│   │   └── hotel_bookings.csv
-│   ├── preprocessing
-│   │   ├── Eksperimen_Muhammad_Adha.ipynb
-│   │   ├── automate_Muhammad_Adha.py
-│   │   └── hotel_bookings_preprocessing
-│   │       ├── train.csv
-│   │       ├── test.csv
-│   │       ├── dataset_info.json
-│   │       ├── feature_columns.json
-│   │       └── label_mapping.json
-│   ├── README.md
-│   └── requirements.txt
-├── Membangun_model
-│   ├── hotel_bookings_preprocessing
-│   ├── mlruns
-│   ├── modelling.py
-│   ├── modelling_tuning.py
-│   ├── run_dagshub_tuning.ps1
-│   ├── model_output_tuned
-│   │   ├── model.joblib
-│   │   ├── feature_columns.json
-│   │   ├── label_mapping.json
-│   │   └── best_params.json
-│   ├── training_artifacts
-│   │   ├── best_params.json
-│   │   ├── classification_report.json
-│   │   ├── confusion_matrix.json
-│   │   ├── cv_results.csv
-│   │   ├── feature_importance.csv
-│   │   └── sample_predictions.csv
-│   ├── screenshoot_dashboard.jpg
-│   ├── screenshoot_artifak.jpg
-│   ├── DagsHub.txt
-│   ├── README.md
-│   └── requirements.txt
-├── Workflow-CI
-│   ├── .github/workflows/train.yml
-│   └── MLProject
-│       ├── MLProject
-│       ├── conda.yaml
-│       ├── modelling.py
-│       ├── hotel_bookings_preprocessing
-│       ├── model_output
-│       ├── training_artifacts
-│       ├── DockerHub.txt
-│       └── run_id.txt
-├── apps
-│   └── api
-│       ├── main.py
-│       ├── Dockerfile
-│       ├── requirements.txt
-│       └── README.md
-├── .github/workflows/api-cd.yml
-├── railway.json
-├── .dockerignore
-├── Monitoring dan Logging
-│   ├── 1.bukti_serving
-│   ├── 2.prometheus.yml
-│   ├── 3.prometheus_exporter.py
-│   ├── 4.bukti monitoring Prometheus
-│   ├── 5.bukti monitoring Grafana
-│   ├── 6.bukti alerting Grafana
-│   ├── 7.Inference.py
-│   ├── 8.generate_dashboard_demo_traffic.py
-│   ├── docker-compose.yml
-│   ├── grafana
-│   │   ├── dashboards
-│   │   └── provisioning
-│   │       ├── alerting
-│   │       ├── dashboards
-│   │       └── datasources
-│   ├── .env.example
-│   ├── README.md
-│   └── requirements.txt
-├── README.md
-├── Eksperimen_SML_Muhammad_Adha.txt
-└── Workflow-CI.txt
+apps/alloy
 ```
 
-## Cara Menjalankan
+Alur monitoring public:
 
-Install dependency utama:
+```text
+Railway API /metrics
+-> Grafana Alloy on Railway
+-> Grafana Cloud remote write
+-> Grafana dashboard and alerting
+```
+
+Variable Railway untuk Alloy:
+
+| Variable | Keterangan |
+|---|---|
+| `HOTEL_BOOKING_METRICS_HOST` | Host API Railway, misalnya `your-railway-api-url.up.railway.app` |
+| `HOTEL_BOOKING_METRICS_SCHEME` | `https` |
+| `HOTEL_BOOKING_METRICS_PATH` | `/metrics` |
+| `GRAFANA_CLOUD_REMOTE_WRITE_URL` | Remote write URL dari Grafana Cloud |
+| `GRAFANA_CLOUD_USERNAME` | Username atau instance ID Grafana Cloud |
+| `GRAFANA_CLOUD_TOKEN` | Token Grafana Cloud |
+
+Alert yang dipakai:
+
+- High API latency.
+- High error rate.
+- High request/prediction volume.
+
+Catatan: untuk contact point email di Grafana Cloud, alamat penerima harus valid dan diizinkan oleh organisasi Grafana Cloud.
+
+## CI/CD
+
+### Continuous Training
+
+Workflow retraining lama berada di:
+
+```text
+Workflow-CI/.github/workflows/train.yml
+```
+
+Workflow ini:
+
+1. Menjalankan MLflow Project.
+2. Melatih ulang Random Forest.
+3. Menyimpan artifact training.
+4. Menyimpan snapshot `model_output`.
+5. Membangun dan push Docker image MLflow model jika Docker Hub secret tersedia.
+
+### API Continuous Deployment
+
+Workflow CD tambahan berada di:
+
+```text
+.github/workflows/api-cd.yml
+```
+
+Workflow ini:
+
+1. Checkout repository.
+2. Install dependency CT.
+3. Menjalankan continuous training dari `Workflow-CI/MLProject`.
+4. Memvalidasi artifact model.
+5. Build Docker image FastAPI dengan model hasil CT terbaru.
+6. Push image ke Docker Hub jika secret tersedia.
+7. Menghubungkan image terbaru ke service Railway dan redeploy jika Railway secret tersedia.
+
+Secret GitHub Actions yang dibutuhkan:
+
+| Secret | Fungsi |
+|---|---|
+| `DOCKERHUB_USERNAME` | Username Docker Hub |
+| `DOCKERHUB_TOKEN` | Token Docker Hub |
+| `RAILWAY_TOKEN` | Token Railway |
+| `RAILWAY_PROJECT_ID` | ID project Railway |
+| `RAILWAY_SERVICE` | Nama service Railway API |
+| `RAILWAY_ENVIRONMENT` | Environment Railway, default `production` |
+
+## Cara Menjalankan Lokal
+
+### 1. Jalankan API
+
+Dari root project:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r Membangun_model/requirements.txt
+pip install -r apps/api/requirements.txt
+python apps/api/main.py
 ```
 
-Training baseline:
+API lokal berjalan di:
+
+```text
+http://127.0.0.1:8000
+```
+
+Cek health:
 
 ```powershell
-cd Membangun_model
-python modelling.py
+Invoke-RestMethod http://127.0.0.1:8000/health
 ```
 
-Training tuning:
+### 2. Jalankan Frontend
+
+Dari folder frontend:
 
 ```powershell
-python modelling_tuning.py
+cd apps/web
+npm install
+npm run dev
 ```
 
-MLflow UI:
+Default URL:
+
+```text
+http://localhost:3000
+```
+
+Jika port `3000` sudah dipakai, Next.js akan menggunakan port lain seperti `3001` atau `3002`.
+
+### 3. Environment Frontend
+
+Buat file:
+
+```text
+apps/web/.env.local
+```
+
+Isi minimal:
+
+```env
+HOTEL_API_BASE_URL=https://your-railway-api-url.up.railway.app
+NEXT_PUBLIC_GRAFANA_DASHBOARD_URL=https://your-public-grafana-dashboard-url
+```
+
+Jika ingin memakai API lokal, ubah:
+
+```env
+HOTEL_API_BASE_URL=http://127.0.0.1:8000
+```
+
+### 4. Build Frontend
 
 ```powershell
-mlflow ui --backend-store-uri ./mlruns --port 5000
+cd apps/web
+npm run build
 ```
 
-Serving dan monitoring:
+## Deployment
+
+### Deploy API ke Railway
+
+Railway memakai konfigurasi:
+
+```text
+railway.json
+apps/api/Dockerfile
+```
+
+Dockerfile API menyalin model dari:
+
+```text
+Membangun_model/model_output_tuned
+```
+
+atau dari artifact CT:
+
+```text
+Workflow-CI/MLProject/model_output
+```
+
+tergantung build argument di workflow.
+
+Variable API yang umum:
+
+| Variable | Fungsi |
+|---|---|
+| `MODEL_DIR` | Lokasi model dalam container, default `/app/model` |
+| `SAMPLE_DATA_PATH` | Lokasi sample test CSV |
+| `CORS_ORIGINS` | Origin frontend yang diizinkan |
+
+### Deploy Web ke Vercel
+
+Saat import repository ke Vercel:
+
+```text
+Framework Preset : Next.js
+Root Directory   : apps/web
+Build Command    : npm run build
+Output Directory : .next
+```
+
+Tambahkan environment variables:
+
+```env
+HOTEL_API_BASE_URL=https://your-railway-api-url.up.railway.app
+NEXT_PUBLIC_GRAFANA_DASHBOARD_URL=https://your-public-grafana-dashboard-url
+```
+
+## Struktur Repository
+
+```text
+SMSML_Muhammad_Adha_Hotel_Booking/
+|-- README.md
+|-- railway.json
+|-- .github/
+|   `-- workflows/
+|       `-- api-cd.yml
+|-- apps/
+|   |-- api/
+|   |   |-- main.py
+|   |   |-- Dockerfile
+|   |   |-- requirements.txt
+|   |   `-- README.md
+|   |-- alloy/
+|   |   |-- config.alloy
+|   |   |-- Dockerfile
+|   |   |-- railway.json
+|   |   `-- README.md
+|   `-- web/
+|       |-- app/
+|       |   |-- page.tsx
+|       |   |-- booking/
+|       |   |-- staff/
+|       |   `-- api/
+|       |-- lib/
+|       |   |-- booking.ts
+|       |   `-- demo-store.ts
+|       |-- package.json
+|       |-- next.config.mjs
+|       `-- README.md
+|-- Eksperimen_SML_Muhammad_Adha/
+|   |-- preprocessing/
+|   |   |-- automate_Muhammad_Adha.py
+|   |   `-- hotel_bookings_preprocessing/
+|   |-- hotel_bookings_raw/
+|   `-- README.md
+|-- Membangun_model/
+|   |-- modelling.py
+|   |-- modelling_tuning.py
+|   |-- model_output_tuned/
+|   |-- training_artifacts/
+|   |-- hotel_bookings_preprocessing/
+|   `-- README.md
+|-- Workflow-CI/
+|   |-- .github/workflows/train.yml
+|   `-- MLProject/
+`-- Monitoring dan Logging/
+    |-- 2.prometheus.yml
+    |-- 3.prometheus_exporter.py
+    |-- docker-compose.yml
+    `-- grafana/
+```
+
+## Dokumen Pendukung
+
+| File | Isi |
+|---|---|
+| `Eksperimen_SML_Muhammad_Adha/README.md` | Catatan eksperimen dan preprocessing |
+| `Membangun_model/README.md` | Catatan training baseline dan tuning |
+| `Workflow-CI/README.md` | Ringkasan MLflow Project untuk retraining |
+| `apps/api/README.md` | Dokumentasi API FastAPI |
+| `apps/web/README.md` | Dokumentasi frontend Next.js |
+| `apps/alloy/README.md` | Dokumentasi Alloy untuk Grafana Cloud |
+| `Monitoring dan Logging/README.md` | Dokumentasi monitoring lokal Prometheus-Grafana |
+
+## Batasan Demo
+
+- Staff dashboard memakai seed data dan `localStorage`, belum memakai database production.
+- Profil user masih berupa data demo di frontend.
+- Email booking confirmation pada UI customer masih simulasi.
+- Action recommendations di staff detail masih interaktif lokal, belum terhubung ke CRM/email service.
+- Payment flow belum diimplementasikan.
+- Grafana Cloud alert email bergantung pada konfigurasi organisasi dan contact point Grafana.
+
+## Verifikasi yang Sudah Dilakukan
+
+Frontend berhasil dibuild dengan:
 
 ```powershell
-cd "../Monitoring dan Logging"
-python 3.prometheus_exporter.py
-docker compose up -d
-python 7.Inference.py
+cd apps/web
+npm run build
 ```
 
-## Tech Stack
+Route Next.js yang tersedia:
 
-- Python
-- Pandas, NumPy
-- Scikit-learn
-- MLflow
-- DagsHub
-- FastAPI
-- Prometheus
-- Grafana
-- Docker
-- GitHub Actions
+```text
+/
+/booking
+/staff
+/staff/bookings/[bookingId]
+/api/health
+/api/predict-booking
+```
 
-## Catatan
+API Railway yang dipakai frontend dikonfigurasi melalui:
 
-Proyek ini dibuat sebagai studi kasus MLOps untuk menunjukkan alur machine learning yang lebih lengkap: mulai dari eksperimen data, training, experiment tracking, CI/CD, serving, monitoring, hingga alerting.
+```text
+HOTEL_API_BASE_URL
+```
+
+Nilai ini wajib diset melalui environment variable, misalnya:
+
+```text
+https://your-railway-api-url.up.railway.app
+```
+
+## Ringkasan Nilai Tambah Final Project
+
+Dibanding submission sebelumnya, final project ini menambahkan:
+
+- Frontend booking hotel berbasis Next.js.
+- Customer booking wizard yang realistis dan tidak mengekspos fitur teknis model.
+- API proxy Next.js untuk menjaga URL model service tetap terpusat.
+- FastAPI production endpoint `/predict-booking` yang menerima payload bisnis.
+- Transformasi raw booking ke 77 fitur model di backend.
+- Staff dashboard operasional dan halaman booking detail terpisah.
+- Demo state booking baru melalui `localStorage`.
+- CD API menuju Docker Hub dan Railway.
+- Monitoring public menggunakan Grafana Alloy dan Grafana Cloud.
+- Alerting untuk reliability API dan model-serving metrics.

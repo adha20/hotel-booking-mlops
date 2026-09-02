@@ -1,9 +1,4 @@
-﻿"""Train the baseline hotel booking cancellation model with MLflow autolog.
-
-This script is intentionally simple: it loads the preprocessed training data,
-fits a Scikit-Learn pipeline, and lets MLflow autolog record the run.
-Hyperparameter tuning and manual logging are handled in modelling_tuning.py.
-"""
+﻿"""Train the baseline hotel booking cancellation model with MLflow autolog."""
 
 from __future__ import annotations
 
@@ -63,15 +58,12 @@ def main() -> None:
     args = parse_args()
     x_train, y_train = load_dataset(args.data_dir, args.target_column)
 
-    # MLflow autolog records parameters, metrics, model metadata, and artifacts.
     mlflow.set_tracking_uri(args.tracking_uri)
     mlflow.set_experiment(args.experiment_name)
     mlflow.sklearn.autolog(log_models=True)
 
     model = build_pipeline(args.random_state)
 
-    # Keep the baseline run focused on autolog only; manual logging lives in the
-    # tuning script so the two approaches are easy to compare.
     with mlflow.start_run(run_name="baseline_logreg_autolog") as run:
         model.fit(x_train, y_train)
         print("Baseline Logistic Regression training finished.")

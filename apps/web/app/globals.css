@@ -1,0 +1,3466 @@
+:root {
+  --ink: #111827;
+  --muted: #6b7280;
+  --line: #e7dfd7;
+  --paper: #ffffff;
+  --gold: #b9823c;
+  --gold-dark: #8d5a20;
+  --sidebar: #070c14;
+  --sidebar-soft: #111822;
+  --shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: #f7f6f4;
+  scrollbar-color: #ffffff transparent;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #f7f6f4;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body:has(.staffWorkspace) {
+  background: #ffffff;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+.hotelShowcase {
+  display: grid;
+  gap: 32px;
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+@media (min-width: 981px) {
+  body:has(.publicBookingPage) {
+    overflow-y: auto;
+  }
+}
+
+.publicBookingPage {
+  display: block;
+  width: calc(100% - 24px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 8px 0;
+}
+
+.publicBookingCard,
+.rightSidebar {
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.publicContent {
+  display: block;
+  min-width: 0;
+}
+
+.publicBookingCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 16px);
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.mainNav {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(260px, auto) 1fr auto;
+  align-items: center;
+  gap: 24px;
+  height: 82px;
+  padding: 0 54px;
+  color: #ffffff;
+}
+
+.brand,
+.sidebarLogo {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-transform: uppercase;
+}
+
+.brand {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.brand svg,
+.sidebarLogo svg {
+  color: #d89b47;
+}
+
+.mainNav nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 40px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.mainNav nav a {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bookNowButton,
+.heroButton,
+.searchButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(180deg, #c99148, #9a651f);
+  padding: 0 26px;
+  font-size: 1rem;
+  font-weight: 900;
+  box-shadow: 0 14px 24px rgba(69, 39, 16, 0.22);
+}
+
+.bookNowButton {
+  min-width: 128px;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.staffAccessButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.13);
+  color: #ffffff;
+  padding: 0 18px;
+  font-size: 1rem;
+  font-weight: 900;
+  backdrop-filter: blur(10px);
+}
+
+.staffAccessButton:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.heroSection {
+  position: relative;
+  flex: none;
+  min-height: clamp(455px, 47vw, 555px);
+  background-position: center 44%;
+  background-size: cover;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(35, 21, 11, 0.9) 0%, rgba(35, 21, 11, 0.69) 35%, rgba(35, 21, 11, 0.23) 67%, rgba(35, 21, 11, 0.48) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.26));
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 2;
+  width: min(560px, 90%);
+  padding: 144px 0 0 56px;
+  color: #ffffff;
+}
+
+.heroCopy h1 {
+  margin-bottom: 18px;
+  font-size: clamp(2.55rem, 3.15vw, 3.65rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.heroCopy h1 span {
+  display: block;
+}
+
+.heroCopy p {
+  width: min(520px, 100%);
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: clamp(1.12rem, 1.45vw, 1.32rem);
+  line-height: 1.5;
+}
+
+.heroButton {
+  min-width: 184px;
+  min-height: 54px;
+}
+
+.searchCard {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1.15fr 1.15fr 1.08fr 1fr 120px;
+  gap: 22px;
+  width: calc(100% - 104px);
+  margin: -62px auto 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  padding: 22px 28px;
+  box-shadow: 0 18px 34px rgba(17, 24, 39, 0.14);
+}
+
+.searchBox,
+.bookingSelect {
+  display: grid;
+  gap: 9px;
+  position: relative;
+  color: #212936;
+  font-size: 0.93rem;
+  font-weight: 800;
+}
+
+.bookingSelect::after {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #111827;
+  border-bottom: 2px solid #111827;
+  content: "";
+  pointer-events: none;
+  transform: rotate(45deg);
+}
+
+.searchBox strong,
+.bookingSelect select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 45px;
+  width: 100%;
+  border: 1px solid #ddd7cf;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  padding: 0 16px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.searchBox svg {
+  color: var(--gold);
+  flex: 0 0 auto;
+}
+
+.searchDateBox strong {
+  position: relative;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.searchDateBox input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  color: #111827;
+  font: inherit;
+  font-weight: 600;
+  outline: none;
+  pointer-events: none;
+}
+
+.datePickerButton {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+
+.datePickerShell svg {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.bookingSelect select {
+  appearance: none;
+  outline: none;
+  padding-right: 44px;
+}
+
+.bookingSelect select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(185, 130, 60, 0.18);
+}
+
+.searchButton {
+  align-self: end;
+  min-width: 120px;
+  gap: 8px;
+  font-size: 1.08rem;
+}
+
+.roomsSection {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  padding: 34px 54px 58px;
+}
+
+.roomsIntro h2 {
+  margin-bottom: 6px;
+  font-size: 1.55rem;
+  line-height: 1.1;
+}
+
+.roomsIntro p {
+  margin-bottom: 20px;
+  color: var(--muted);
+  font-size: 1.06rem;
+}
+
+.roomGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 42px;
+}
+
+.roomCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 548px;
+  overflow: hidden;
+  border: 1px solid #dfd4c8;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 26px rgba(17, 24, 39, 0.1);
+  cursor: pointer;
+  transform: translateY(0);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.roomCard:hover,
+.roomCard:focus-within {
+  border-color: var(--gold);
+  box-shadow:
+    0 18px 38px rgba(17, 24, 39, 0.18),
+    0 0 0 3px rgba(185, 130, 60, 0.12);
+  transform: translateY(-10px);
+}
+
+.roomCard:active {
+  transform: translateY(-5px) scale(0.995);
+}
+
+.roomCard:focus-visible {
+  outline: 3px solid rgba(185, 130, 60, 0.34);
+  outline-offset: 4px;
+}
+
+.roomCard > button {
+  display: block;
+  width: 100%;
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.roomCard img {
+  width: 100%;
+  height: clamp(238px, 20vw, 300px);
+  padding: 8px 8px 0;
+  border-radius: 14px 14px 0 0;
+  object-fit: cover;
+}
+
+.roomInfo {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px 20px;
+}
+
+.roomTitleRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 0;
+}
+
+.roomTitleText {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.roomTitleText h3,
+.roomTitleRow strong {
+  margin-bottom: 0;
+  font-size: 1.08rem;
+  line-height: 1.2;
+}
+
+.roomTitleText p,
+.roomTitleText span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.roomTitleText span {
+  width: max-content;
+  max-width: 100%;
+  border-radius: 999px;
+  background: #fbf4eb;
+  color: var(--gold-dark);
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.roomTitleRow strong {
+  white-space: nowrap;
+}
+
+.roomTitleRow strong span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.hotelSpecs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+  color: #374151;
+  font-size: 0.86rem;
+}
+
+.hotelSpecs span {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.hotelSpecs svg {
+  flex: 0 0 auto;
+  color: var(--gold);
+}
+
+.hotelSpecs span:first-child svg {
+  fill: #d89b47;
+}
+
+.detailsButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  min-width: 124px;
+  align-self: flex-end;
+  margin-top: auto;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--gold-dark);
+  padding: 0 12px;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.noHotelResults {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  border: 1px solid #eaded0;
+  border-radius: 8px;
+  background: #fffaf4;
+  padding: 34px 20px;
+  text-align: center;
+}
+
+.noHotelResults strong {
+  color: #111827;
+  font-size: 1.15rem;
+}
+
+.noHotelResults p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.selectedRoomSummary {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+  border: 1px solid #eaded0;
+  border-radius: 8px;
+  background: #fffaf4;
+  padding: 14px;
+}
+
+.selectedRoomSummary img {
+  width: 120px;
+  height: 82px;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
+.selectedRoomSummary div {
+  min-width: 0;
+}
+
+.selectedRoomSummary span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--gold-dark);
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.selectedRoomSummary h3 {
+  margin-bottom: 8px;
+  font-size: 1.25rem;
+}
+
+.selectedRoomSummary p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.selectedRoomSummary strong {
+  color: var(--gold-dark);
+  white-space: nowrap;
+  font-size: 1.15rem;
+}
+
+.customerBookingSection {
+  position: relative;
+  scroll-margin-top: 18px;
+  padding: 34px 18px 10px;
+}
+
+.bookingWorkflowPage {
+  width: min(1080px, calc(100% - 24px));
+  margin: 0 auto;
+  padding: 28px 0 60px;
+}
+
+.bookingTopNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.darkBrand {
+  color: var(--ink);
+}
+
+.darkBrand svg {
+  color: var(--gold);
+}
+
+.staffLinkButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border: 1px solid #d8c7b4;
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--gold-dark);
+  padding: 0 16px;
+  font-weight: 900;
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.08);
+}
+
+.bookingWizardPage {
+  width: min(1480px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 24px 0 58px;
+}
+
+.bookingStepper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 28px;
+  margin: 4px auto 30px;
+  padding: 0;
+  list-style: none;
+}
+
+.bookingStepper li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: #0f172a;
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
+.bookingStepper li:not(:last-child)::after {
+  position: absolute;
+  top: 22px;
+  left: calc(50% + 40px);
+  width: calc(100% - 52px);
+  height: 4px;
+  border-radius: 999px;
+  background: #d4d7dc;
+  content: "";
+}
+
+.bookingStepper li.active:not(:last-child)::after {
+  background: #08275d;
+}
+
+.bookingStepper span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 3px solid #d1d5db;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #111827;
+  font-size: 1.1rem;
+  font-weight: 950;
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.1);
+}
+
+.bookingStepper li.active span {
+  border-color: #08275d;
+  background: #08275d;
+  color: #ffffff;
+}
+
+.wizardTwoColumn,
+.confirmWizardGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.wizardPanel {
+  border: 1px solid #d8dde6;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 42px rgba(17, 24, 39, 0.08);
+}
+
+.guestStayPanel,
+.bookingSummaryPanel,
+.stepTwoPanel,
+.confirmDetailPanel,
+.pricePanel,
+.roomMiniSummary,
+.addOnMiniSummary {
+  padding: 34px;
+}
+
+.guestStayPanel h2,
+.bookingSummaryPanel h2,
+.wizardSectionTitle h2 {
+  margin-bottom: 30px;
+  color: #0f172a;
+  font-size: 1.72rem;
+  line-height: 1.1;
+}
+
+.wizardFormGrid {
+  display: grid;
+  gap: 24px 34px;
+}
+
+.wizardFormGrid.twoColumns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wizardFormGrid.twoColumns .wizardField:nth-child(3) {
+  grid-column: 1 / 2;
+}
+
+.wizardFormGrid.stayColumns {
+  grid-template-columns: 1.1fr 1.1fr 0.55fr 0.55fr;
+}
+
+.wizardField {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  color: #111827;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.wizardField input,
+.wizardField select,
+.wizardField textarea,
+.wizardDateButton {
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid #cfd5df;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  padding: 0 18px;
+  font-size: 1.12rem;
+  font-weight: 500;
+  outline: none;
+}
+
+.wizardField input:focus,
+.wizardField select:focus,
+.wizardField textarea:focus,
+.wizardDateButton:focus-visible {
+  border-color: #0b5cff;
+  box-shadow: 0 0 0 4px rgba(11, 92, 255, 0.14);
+}
+
+.wizardField textarea {
+  min-height: 110px;
+  padding-block: 18px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.guestStayPanel > .wizardField {
+  margin-top: 24px;
+}
+
+.wizardSelectField select {
+  appearance: none;
+  padding-right: 42px;
+}
+
+.wizardSelectField::after {
+  position: absolute;
+  right: 18px;
+  bottom: 23px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #111827;
+  border-bottom: 2px solid #111827;
+  content: "";
+  pointer-events: none;
+  transform: rotate(45deg);
+}
+
+.wizardDateField {
+  position: relative;
+}
+
+.wizardDateButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.wizardDateButton svg {
+  color: #111827;
+}
+
+.wizardNativeDate {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1px !important;
+  min-height: 1px !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wizardDivider {
+  height: 1px;
+  margin: 26px 0 28px;
+  background: #e2e5ea;
+}
+
+.wizardCheckRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 26px 0 18px;
+  color: #111827;
+  font-size: 1.02rem;
+}
+
+.wizardCheckRow input {
+  width: 20px;
+  height: 20px;
+  accent-color: #08275d;
+}
+
+.wizardPrimaryButton,
+.wizardSecondaryButton,
+.confirmBookingButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 58px;
+  border-radius: 7px;
+  padding: 0 24px;
+  font-size: 1.05rem;
+  font-weight: 850;
+}
+
+.wizardPrimaryButton {
+  width: 100%;
+  border: 0;
+  background: #06265f;
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(6, 38, 95, 0.18);
+}
+
+.wizardPrimaryButton.compact {
+  width: auto;
+  min-width: 292px;
+}
+
+.wizardSecondaryButton {
+  border: 1px solid #d4d9e3;
+  background: #ffffff;
+  color: #111827;
+}
+
+.wizardSecondaryButton.fullWidth {
+  width: 100%;
+}
+
+.wizardStatus {
+  margin: 12px 0 0;
+  color: #b42318;
+  font-size: 0.96rem;
+  font-weight: 800;
+}
+
+.bookingSummaryPanel {
+  display: grid;
+  align-content: start;
+  gap: 28px;
+}
+
+.summaryRoomHero {
+  display: grid;
+  grid-template-columns: minmax(200px, 320px) 1fr;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid #d7dbe3;
+  padding-bottom: 26px;
+}
+
+.summaryRoomHero img,
+.roomMiniSummary img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.summaryRoomHero img {
+  height: 150px;
+}
+
+.summaryRoomHero h3 {
+  margin-bottom: 14px;
+  font-size: 1.35rem;
+}
+
+.summaryRoomHero strong,
+.roomMiniSummary strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #0f172a;
+  font-size: 1.25rem;
+}
+
+.summaryRoomHero strong span,
+.roomMiniSummary strong span {
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.summaryRoomHero p {
+  margin: 0;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.summaryRows {
+  display: grid;
+  gap: 21px;
+}
+
+.summaryRow,
+.priceRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+  color: #111827;
+  font-size: 1.05rem;
+}
+
+.summaryRow span,
+.priceRow span {
+  color: #111827;
+  font-weight: 500;
+}
+
+.summaryRow b,
+.priceRow b {
+  color: #111827;
+  font-weight: 650;
+  text-align: right;
+}
+
+.summaryRow.strong b,
+.priceRow.total b {
+  color: #159a33;
+  font-size: 1.3rem;
+  font-weight: 950;
+}
+
+.riskInfoBox {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 22px;
+  border: 1px solid #9cc8ff;
+  border-radius: 7px;
+  background: #eff7ff;
+  color: #052b6f;
+  padding: 20px 24px;
+}
+
+.riskInfoBox svg {
+  color: #0072dc;
+}
+
+.riskInfoBox p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.wizardSectionTitle {
+  margin-bottom: 22px;
+}
+
+.wizardSectionTitle h2 {
+  margin-bottom: 10px;
+}
+
+.wizardSectionTitle p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 1rem;
+}
+
+.roomChoiceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.roomChoiceCard {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  min-height: 348px;
+  border: 1px solid #d9dee8;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px;
+  color: #111827;
+  text-align: left;
+  box-shadow: 0 12px 24px rgba(17, 24, 39, 0.06);
+}
+
+.roomChoiceCard.selected {
+  border-color: #0b63ff;
+  box-shadow:
+    0 0 0 3px rgba(11, 99, 255, 0.14),
+    0 12px 24px rgba(17, 24, 39, 0.06);
+}
+
+.roomChoiceCard img {
+  height: 132px;
+  width: 100%;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.roomRadio,
+.addOnCheck {
+  display: grid;
+  place-items: center;
+  border: 2px solid #c3cad6;
+  background: #ffffff;
+}
+
+.roomRadio {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.roomChoiceCard.selected .roomRadio {
+  border: 7px solid #0b63ff;
+}
+
+.roomChoiceCard strong {
+  font-size: 1.08rem;
+}
+
+.roomChoiceCard b {
+  color: #111827;
+  font-size: 1rem;
+}
+
+.roomChoiceCard b span {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.roomSpec {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #374151;
+  font-size: 0.88rem;
+}
+
+.roomChoiceCard em {
+  margin-top: 4px;
+  color: #0057d8;
+  font-style: normal;
+  font-weight: 850;
+}
+
+.addOnsTitle {
+  margin-top: 38px;
+}
+
+.addOnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.addOnCard {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  min-height: 76px;
+  border: 1px solid #dfe3ea;
+  border-radius: 7px;
+  background: #ffffff;
+  padding: 16px 18px;
+  color: #111827;
+  text-align: left;
+}
+
+.addOnCard.selected {
+  border-color: #0b63ff;
+  background: #f6faff;
+}
+
+.addOnCard > svg {
+  color: #374151;
+}
+
+.addOnCheck {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.addOnCard.selected .addOnCheck {
+  border-color: #0b63ff;
+  background: #0b63ff;
+}
+
+.addOnCard strong,
+.addOnCard small {
+  display: block;
+}
+
+.addOnCard small {
+  margin-top: 4px;
+  color: #6b7280;
+}
+
+.addOnCard b {
+  white-space: nowrap;
+}
+
+.wizardActionRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.confirmWizardGrid {
+  align-items: start;
+}
+
+.confirmMainColumn,
+.confirmSideColumn {
+  display: grid;
+  gap: 16px;
+}
+
+.confirmDetailPanel h3,
+.pricePanel h3,
+.roomMiniSummary h3,
+.addOnMiniSummary h3 {
+  margin-bottom: 24px;
+  font-size: 1.08rem;
+}
+
+.iconDetailRow {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 42px;
+  color: #111827;
+  font-size: 0.98rem;
+}
+
+.iconDetailRow svg {
+  color: #344054;
+}
+
+.iconDetailRow b {
+  font-weight: 650;
+  text-align: right;
+}
+
+.pricePanel {
+  display: grid;
+  gap: 18px;
+}
+
+.priceRow.bordered {
+  border-top: 1px solid #e2e5ea;
+  padding-top: 18px;
+}
+
+.secureBookingNotice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #c8ead2;
+  border-radius: 7px;
+  background: #f2fff6;
+  color: #157a2e;
+  padding: 18px 22px;
+}
+
+.secureBookingNotice strong,
+.secureBookingNotice span {
+  display: block;
+}
+
+.roomMiniSummary,
+.addOnMiniSummary {
+  display: grid;
+  gap: 14px;
+}
+
+.roomMiniSummary img {
+  height: 132px;
+}
+
+.roomMiniSummary h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.addOnMiniSummary p {
+  margin: 0;
+  color: #6b7280;
+  text-align: center;
+}
+
+.miniAddOnRow {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #eef0f4;
+  padding-bottom: 12px;
+}
+
+.miniAddOnRow > svg {
+  width: 24px;
+  height: 24px;
+  color: #344054;
+}
+
+.termsPanel {
+  border: 1px solid #e1e5ec;
+  border-radius: 7px;
+  background: #ffffff;
+  padding: 20px;
+}
+
+.termsPanel a {
+  color: #0057d8;
+  text-decoration: underline;
+}
+
+.confirmBookingButton {
+  width: 100%;
+  border: 0;
+  background: #0b9837;
+  color: #ffffff;
+  box-shadow: 0 16px 28px rgba(11, 152, 55, 0.2);
+}
+
+.confirmBookingButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.customerFormLabel {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(590px, calc(100% - 34px));
+  min-height: 76px;
+  margin: 0 auto -42px;
+  border-radius: 24px;
+  background: #eee9e4;
+  color: #101827;
+  text-align: center;
+  font-size: clamp(1.55rem, 2.8vw, 2.7rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.customerBookingForm {
+  display: grid;
+  gap: 28px;
+  border: 1px solid #ede8e3;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 78px 54px 38px;
+  box-shadow: 0 20px 50px rgba(17, 24, 39, 0.12);
+}
+
+.customerBookingForm h2 {
+  margin-bottom: 8px;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  line-height: 1.1;
+}
+
+.formGrid {
+  display: grid;
+  gap: 26px 52px;
+}
+
+.guestGrid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.guestGrid label:nth-child(3) {
+  grid-column: 1 / 2;
+}
+
+.stayGrid {
+  grid-template-columns: 1.1fr 1.05fr 0.5fr 0.5fr;
+}
+
+.roomFormGrid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.roomFormGrid label:nth-child(3) {
+  grid-column: 1 / 2;
+}
+
+.customerBookingForm label {
+  display: grid;
+  gap: 12px;
+  color: #1f2937;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.customerBookingForm input,
+.customerBookingForm select,
+.customerBookingForm textarea,
+.dateInputBox {
+  width: 100%;
+  min-height: 68px;
+  border: 1px solid #d5d7db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  padding: 0 24px;
+  font-size: 1.22rem;
+  font-weight: 500;
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.02);
+}
+
+.customerBookingForm select {
+  appearance: auto;
+}
+
+.customerBookingForm input:focus,
+.customerBookingForm select:focus,
+.customerBookingForm textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(185, 130, 60, 0.18);
+}
+
+.dateInputBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dateInputControl {
+  gap: 12px;
+}
+
+.dateInputControl input {
+  width: 100%;
+  min-width: 0;
+  min-height: auto;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.customerBookingForm .dateInputControl input:focus {
+  border: 0;
+  box-shadow: none;
+}
+
+.dateInputControl input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.dateInputBox svg {
+  color: #111827;
+}
+
+.formDivider {
+  height: 1px;
+  background: #dfdfdf;
+}
+
+.requestField {
+  margin-top: 2px;
+}
+
+.customerBookingForm textarea {
+  min-height: 168px;
+  padding: 18px 24px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.reviewButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 72px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(90deg, #a36d25, #b77b2d, #9d641d);
+  font-size: 1.38rem;
+  font-weight: 900;
+  box-shadow: 0 14px 26px rgba(89, 52, 18, 0.2);
+}
+
+.reviewButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.reviewStatus {
+  margin: -10px 0 0;
+  color: var(--gold-dark);
+  font-size: 0.98rem;
+  font-weight: 900;
+}
+
+.customerConfirmationSection {
+  position: relative;
+  width: min(520px, calc(100% - 24px));
+  margin: 0 auto;
+  scroll-margin-top: 18px;
+  padding: 10px 0 18px;
+}
+
+.customerConfirmationCard {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  min-height: auto;
+  border: 1px solid #ede8e3;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 50px 34px 28px;
+  text-align: center;
+  box-shadow: 0 14px 36px rgba(17, 24, 39, 0.12);
+}
+
+.confirmationCheck {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-top: 0;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #17a330, #078822);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.24);
+}
+
+.confirmationCheck svg {
+  width: 48px;
+  height: 48px;
+}
+
+.confirmationCopy h2 {
+  margin-bottom: 10px;
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.confirmationCopy p,
+.emailNotice {
+  margin: 0;
+  max-width: 390px;
+  color: #465264;
+  font-size: clamp(0.98rem, 1.7vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.confirmationPanel {
+  width: 100%;
+  border: 1px solid #9ad7a7;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fcfffd, #f8fffa);
+  padding: 22px 24px;
+}
+
+.confirmationPanel > span {
+  display: block;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.confirmationPanel > strong {
+  display: block;
+  margin: 14px 0 24px;
+  color: #1d9632;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  line-height: 1;
+}
+
+.confirmationRows {
+  display: grid;
+  gap: 15px;
+}
+
+.confirmationRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  color: #2f3948;
+  text-align: left;
+  font-size: 0.98rem;
+  line-height: 1.2;
+}
+
+.confirmationRow b,
+.confirmationRow strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+.confirmationRow strong,
+.emailNotice strong {
+  font-weight: 900;
+}
+
+.emailNotice {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.homeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+  border: 1px solid #a7773e;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #4a2f18;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.homeButton:hover {
+  background: #fbf4eb;
+}
+
+.confirmationActions {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+}
+
+.confirmationActions .homeButton {
+  width: 100%;
+}
+
+.secondaryHomeButton {
+  background: #fbf4eb;
+}
+
+.spin {
+  animation: spin 900ms linear infinite;
+}
+
+.rightSidebar {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: calc(100vh - 16px);
+  background:
+    radial-gradient(circle at 82% 10%, rgba(185, 130, 60, 0.14), transparent 22%),
+    linear-gradient(180deg, #0c1320, #03070d 68%, #050912);
+  color: #ffffff;
+  padding: 36px 30px 42px;
+}
+
+.sidebarLogo {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.sidebarLogo strong {
+  width: 160px;
+  font-size: 1.15rem;
+  line-height: 1.36;
+}
+
+.rightSidebar nav {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.rightSidebar nav a,
+.logoutLink {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 56px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.93);
+  padding: 0 20px;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.rightSidebar nav a.active {
+  background: linear-gradient(90deg, rgba(185, 130, 60, 0.55), rgba(185, 130, 60, 0.38));
+}
+
+.logoutLink {
+  position: relative;
+}
+
+.logoutLink::before {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -30px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.16);
+  content: "";
+}
+
+.staffDashboardShell {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.staffWorkspace {
+  display: grid;
+  min-height: 100vh;
+  gap: 0;
+  padding: 0;
+}
+
+.staffSidebar {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background:
+    radial-gradient(circle at 86% 5%, rgba(185, 130, 60, 0.13), transparent 20%),
+    linear-gradient(180deg, #071120, #02070e 72%, #06101c);
+  color: #ffffff;
+  padding: 34px 26px 42px;
+}
+
+.staffSidebar nav {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.staffSidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 58px;
+  border-radius: 8px;
+  padding: 0 20px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+
+.staffSidebar nav a.active {
+  background: linear-gradient(90deg, rgba(185, 130, 60, 0.58), rgba(185, 130, 60, 0.36));
+}
+
+.staffDashboardMain {
+  min-width: 0;
+  padding: 34px 38px 28px;
+}
+
+.staffHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.staffHeader h1,
+.staffHeader h2 {
+  margin-bottom: 8px;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.staffHeader p {
+  margin: 0;
+  color: #586170;
+  font-size: 1.1rem;
+}
+
+.dateRangeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 54px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  padding: 0 18px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+}
+
+.staffDateControls {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  padding: 0 14px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+}
+
+.staffDateControls input {
+  width: 130px;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font-weight: 700;
+  outline: none;
+}
+
+.staffDateControls span {
+  color: #7a8290;
+  font-weight: 900;
+}
+
+.staffMetricGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.riskFilterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+}
+
+.riskFilterBar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  padding: 0 14px;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.riskFilterBar button.active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.riskFilterBar button.redFilter {
+  border-color: #ef2a31;
+  background: #ef2a31;
+}
+
+.riskFilterBar button.orangeFilter {
+  border-color: #f59a00;
+  background: #f59a00;
+}
+
+.riskFilterBar button.greenFilter {
+  border-color: #12a437;
+  background: #12a437;
+}
+
+.riskFilterBar .resetDataButton {
+  margin-left: auto;
+  border-color: #d8c7b4;
+  color: var(--gold-dark);
+}
+
+.metricCard,
+.staffPanel,
+.detailPanel,
+.actionPanel {
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.09);
+}
+
+.metricCard {
+  display: grid;
+  gap: 18px;
+  min-height: 178px;
+  padding: 30px 26px;
+}
+
+.metricCard > span {
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.metricValue {
+  font-size: 2.75rem;
+  line-height: 1;
+}
+
+.metricCard p {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  color: #485365;
+  font-size: 0.95rem;
+}
+
+.metricCard p b {
+  font-weight: 900;
+}
+
+.green {
+  color: #12a437;
+}
+
+.red {
+  color: #ee191f;
+}
+
+.orange {
+  color: #f59a00;
+}
+
+.staffDashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 20px;
+}
+
+.staffPanel {
+  min-width: 0;
+  padding: 24px;
+}
+
+.staffPanel h2,
+.staffPanel h3 {
+  margin-bottom: 22px;
+  color: #111827;
+  font-size: 1.22rem;
+  line-height: 1.2;
+}
+
+.riskDistributionBody {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(210px, 0.88fr) 1.12fr;
+  align-items: center;
+  gap: 38px;
+  min-height: 292px;
+}
+
+.riskDonut {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+}
+
+.riskDonutChart {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+}
+
+.riskDonutTrack,
+.riskDonutSegment {
+  fill: none;
+  stroke-linecap: butt;
+}
+
+.riskDonutTrack {
+  stroke: #eef2f7;
+  stroke-width: 48;
+}
+
+.riskDonutSegment {
+  cursor: pointer;
+  stroke-width: 48;
+  transition:
+    filter 160ms ease,
+    opacity 160ms ease,
+    stroke-width 160ms ease;
+}
+
+.riskDonutSegment.red {
+  stroke: #f01822;
+}
+
+.riskDonutSegment.orange {
+  stroke: #f5a000;
+}
+
+.riskDonutSegment.green {
+  stroke: #39ad48;
+}
+
+.riskDonutSegment:hover,
+.riskDonutSegment.active,
+.riskDonutSegment:focus-visible {
+  filter: drop-shadow(0 10px 14px rgba(17, 24, 39, 0.18));
+  opacity: 0.96;
+  outline: none;
+  stroke-width: 54;
+}
+
+.riskDonutCenter {
+  position: absolute;
+  inset: 50%;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.riskDonutCenter strong {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.riskDonutCenter span {
+  margin-top: -16px;
+  font-size: 0.95rem;
+}
+
+.riskLegendStack {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+.riskLegend {
+  display: grid;
+  gap: 16px;
+}
+
+.riskLegendItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  font-size: 1.02rem;
+  padding: 9px 10px;
+  text-align: left;
+  transition:
+    background 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.riskLegendItem:hover,
+.riskLegendItem.active,
+.riskLegendItem:focus-visible {
+  background: #f8fafc;
+  box-shadow: inset 0 0 0 1px #e5e7eb;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.riskLegendItem strong {
+  font-weight: 900;
+}
+
+.riskDot {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.riskDot.green {
+  background: #39ad48;
+}
+
+.riskDot.red {
+  background: #f01822;
+}
+
+.riskDot.orange {
+  background: #f5a000;
+}
+
+.chartHoverTooltip {
+  position: absolute;
+  z-index: 8;
+  width: max-content;
+  max-width: 230px;
+  padding: 9px 11px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+  color: #111827;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+.chartHoverTooltip::after {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  background: inherit;
+  content: "";
+  opacity: 0.22;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.chartHoverTooltip > span {
+  display: block;
+  margin-bottom: 3px;
+  color: #64748b;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.chartHoverTooltip strong {
+  display: block;
+  color: #111827;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.chartHoverTooltip p {
+  margin: 4px 0 0;
+  color: #475569;
+  font-size: 0.74rem;
+  line-height: 1.38;
+}
+
+.chartHoverTooltip.red {
+  border-color: rgba(240, 24, 34, 0.26);
+  background: #fff7f7;
+  color: #f01822;
+}
+
+.chartHoverTooltip.orange {
+  border-color: rgba(245, 160, 0, 0.3);
+  background: #fffaf0;
+  color: #f5a000;
+}
+
+.chartHoverTooltip.green {
+  border-color: rgba(57, 173, 72, 0.26);
+  background: #f6fff8;
+  color: #34a943;
+}
+
+.chartHoverTooltip .trendBreakdown {
+  gap: 5px 10px;
+  margin-top: 6px;
+  font-size: 0.7rem;
+}
+
+.chartHoverTooltip .trendBreakdown .riskDot {
+  width: 7px;
+  height: 7px;
+}
+
+.riskInsightCard,
+.trendInsightCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+}
+
+.riskInsightCard {
+  display: grid;
+  gap: 5px;
+  padding: 14px 16px;
+}
+
+.riskInsightCard > span,
+.trendInsightCard > span {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.riskInsightCard strong {
+  color: #111827;
+  font-size: 1.15rem;
+}
+
+.riskInsightCard p,
+.trendInsightCard p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.riskInsightCard.red,
+.trendInsightCard.red {
+  border-color: rgba(240, 24, 34, 0.24);
+  background: #fff7f7;
+}
+
+.riskInsightCard.orange,
+.trendInsightCard.orange {
+  border-color: rgba(245, 160, 0, 0.28);
+  background: #fffaf0;
+}
+
+.riskInsightCard.green,
+.trendInsightCard.green {
+  border-color: rgba(57, 173, 72, 0.24);
+  background: #f6fff8;
+}
+
+.panelTitleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.chartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 22px;
+  color: #111827;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.chartLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.chartLegend span::before {
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  content: "";
+}
+
+.legendRed::before {
+  background: #f01822;
+}
+
+.legendOrange::before {
+  background: #f5a000;
+}
+
+.legendGreen::before {
+  background: #34a943;
+}
+
+.trendChart {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 10px;
+}
+
+.trendAxis {
+  display: grid;
+  align-content: space-between;
+  min-height: 230px;
+  color: #111827;
+  font-size: 0.9rem;
+}
+
+.trendChart svg {
+  width: 100%;
+  height: 230px;
+  overflow: visible;
+}
+
+.gridLines line {
+  stroke: #e7e7e7;
+  stroke-width: 1;
+}
+
+.trendChart polyline {
+  fill: none;
+  stroke-width: 3;
+}
+
+.lineHigh,
+.dotHigh {
+  stroke: #f01822;
+  fill: #f01822;
+}
+
+.lineMedium,
+.dotMedium {
+  stroke: #f5a000;
+  fill: #f5a000;
+}
+
+.lineLow,
+.dotLow {
+  stroke: #34a943;
+  fill: #34a943;
+}
+
+.trendPoint {
+  cursor: pointer;
+  outline: none;
+}
+
+.trendHitArea {
+  fill: transparent;
+  stroke: transparent;
+  pointer-events: all;
+}
+
+.trendPoint .dotHigh,
+.trendPoint .dotMedium,
+.trendPoint .dotLow {
+  transition:
+    filter 150ms ease,
+    r 150ms ease,
+    stroke 150ms ease,
+    stroke-width 150ms ease;
+}
+
+.trendPoint:hover .dotHigh,
+.trendPoint:hover .dotMedium,
+.trendPoint:hover .dotLow,
+.trendPoint.active .dotHigh,
+.trendPoint.active .dotMedium,
+.trendPoint.active .dotLow {
+  filter: drop-shadow(0 6px 8px rgba(17, 24, 39, 0.25));
+  stroke: #ffffff;
+  stroke-width: 2.4;
+}
+
+.trendPoint:focus-visible .dotHigh,
+.trendPoint:focus-visible .dotMedium,
+.trendPoint:focus-visible .dotLow {
+  stroke: #111827;
+  stroke-width: 2.6;
+}
+
+.trendLabels {
+  display: grid;
+  grid-column: 2;
+  grid-template-columns: repeat(auto-fit, minmax(54px, 1fr));
+  color: #111827;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.trendInsightCard {
+  display: grid;
+  grid-column: 2;
+  gap: 5px;
+  margin-top: 16px;
+  padding: 12px 14px;
+}
+
+.trendInsightCard strong {
+  color: #111827;
+  font-size: 1rem;
+}
+
+.trendBreakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 4px;
+  color: #334155;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.trendBreakdown span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trendBreakdown .riskDot {
+  width: 9px;
+  height: 9px;
+}
+
+.recentBookingsPanel,
+.factorsPanel {
+  min-height: 318px;
+}
+
+.staffTableWrap {
+  overflow-x: auto;
+}
+
+.recentBookingsPanel .staffTableWrap {
+  max-height: 247px;
+  overflow-y: auto;
+  scrollbar-color: #ffffff transparent;
+  scrollbar-width: thin;
+}
+
+.recentBookingsPanel .staffTableWrap::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.recentBookingsPanel .staffTableWrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recentBookingsPanel .staffTableWrap::-webkit-scrollbar-thumb {
+  border: 1px solid #e6e6e6;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.recentBookingsPanel .staffTableWrap::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.staffTableWrap table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+
+.staffTableWrap th,
+.staffTableWrap td {
+  border-top: 1px solid #f0f0f0;
+  padding: 12px 4px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.staffTableWrap th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 900;
+}
+
+.selectedRow td {
+  background: #fff8ef;
+}
+
+.bookingLinkButton {
+  border: 0;
+  background: transparent;
+  color: var(--gold-dark);
+  padding: 0;
+  font-weight: 950;
+  text-align: left;
+}
+
+.bookingLinkButton:hover {
+  text-decoration: underline;
+}
+
+.riskText.high {
+  color: #f01822;
+  font-weight: 800;
+}
+
+.riskText.medium {
+  color: #f59a00;
+  font-weight: 800;
+}
+
+.riskText.low {
+  color: #159a33;
+  font-weight: 800;
+}
+
+.dateRangeSummary,
+.emptyTableState {
+  color: #687386;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.emptyTableState {
+  margin: 18px 0 0;
+}
+
+.factorList {
+  display: grid;
+  gap: 22px;
+  padding: 10px 28px 0 0;
+}
+
+.factorRow {
+  display: grid;
+  grid-template-columns: 175px 1fr 44px;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.factorRow > span {
+  text-align: right;
+}
+
+.factorTrack {
+  height: 16px;
+  border-radius: 999px;
+  background: #f3f3f3;
+  overflow: hidden;
+}
+
+.factorTrack i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f21823, #e91d28);
+}
+
+.factorRow b {
+  font-weight: 800;
+}
+
+.factorScale {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding-left: 192px;
+  color: #111827;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.staffDetailSection {
+  position: relative;
+  width: min(740px, calc(100% - 24px));
+  margin: 0 auto;
+  padding-top: 24px;
+}
+
+.detailLabel {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(340px, calc(100% - 34px));
+  min-height: 36px;
+  margin: 0 auto -18px;
+  border-radius: 18px;
+  background: #eee9e4;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.staffDetailCard {
+  border: 1px solid #e6e2de;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 32px 28px 24px;
+  box-shadow: var(--shadow);
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.detailHeader a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.detailPanel {
+  min-height: 178px;
+  padding: 20px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+}
+
+.detailPanel h2,
+.detailPanel h3,
+.actionPanel h2,
+.actionPanel h3 {
+  margin-bottom: 18px;
+  font-size: 1rem;
+}
+
+.detailRows {
+  display: grid;
+  gap: 14px;
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap: 12px;
+  color: #6b7280;
+  font-size: 0.82rem;
+}
+
+.detailRow b {
+  color: #111827;
+  font-weight: 800;
+}
+
+.cancellationPanel {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.cancellationPanel strong {
+  color: #ef353b;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.cancellationPanel.medium strong {
+  color: #f59a00;
+}
+
+.cancellationPanel.low strong {
+  color: #159a33;
+}
+
+.cancellationPanel strong span {
+  font-size: 1.1rem;
+}
+
+.cancellationPanel > b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 126px;
+  min-height: 36px;
+  margin-top: 10px;
+  border-radius: 6px;
+  background: #ef353b;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.cancellationPanel.medium > b {
+  background: #f59a00;
+}
+
+.cancellationPanel.low > b {
+  background: #159a33;
+}
+
+.cancellationPanel p {
+  width: min(230px, 100%);
+  margin: 12px 0 16px;
+  color: #4b5563;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.detailRiskFactors {
+  width: 100%;
+  border-top: 1px solid #e6e6e6;
+  padding-top: 12px;
+  text-align: left;
+}
+
+.detailRiskFactors h3,
+.detailRiskFactors h4 {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+}
+
+.detailRiskFactors ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 14px;
+  color: #111827;
+  font-size: 0.78rem;
+}
+
+.detailRiskFactors li::marker {
+  color: #ef353b;
+}
+
+.actionPanel {
+  margin-top: 14px;
+  padding: 16px 20px;
+}
+
+.actionPanel h3 {
+  margin-bottom: 12px;
+}
+
+.actionRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 38px;
+  border-top: 1px solid #ececec;
+  color: #374151;
+  font-size: 0.86rem;
+}
+
+.actionRow button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 26px;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  background: #ffffff;
+  padding: 0 12px;
+  color: #374151;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.actionRow button.done {
+  border-color: #9bd3a9;
+  background: #f1fff4;
+  color: #148b2e;
+}
+
+.staffDetailShell {
+  min-height: 100vh;
+}
+
+.staffDetailMain {
+  min-width: 0;
+  padding: 34px 38px 32px;
+  background:
+    radial-gradient(circle at 80% 8%, rgba(185, 130, 60, 0.07), transparent 24%),
+    #ffffff;
+}
+
+.staffDetailPageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+  color: #111827;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.staffBackLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  font-weight: 900;
+}
+
+.staffBackLink:hover {
+  color: var(--gold-dark);
+}
+
+.staffDetailHero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #e6e2de;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff, #fbf7f2);
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+}
+
+.staffDetailHero span {
+  color: var(--gold-dark);
+  font-size: 0.82rem;
+  font-weight: 950;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.staffDetailHero h1 {
+  margin: 6px 0 8px;
+  color: #111827;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.staffDetailHero p {
+  margin: 0;
+  color: #586170;
+  font-size: 1.02rem;
+}
+
+.staffRiskBadge {
+  display: grid;
+  justify-items: center;
+  min-width: 150px;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #ef353b;
+  padding: 18px 20px;
+}
+
+.staffRiskBadge.medium {
+  background: #fff8e8;
+  color: #f59a00;
+}
+
+.staffRiskBadge.low {
+  background: #effcf2;
+  color: #159a33;
+}
+
+.staffRiskBadge b {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.staffRiskBadge strong {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.staffDetailFullGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.staffDetailFullGrid .spanTwo {
+  grid-column: span 2;
+}
+
+.staffDetailFullGrid .spanFull {
+  grid-column: 1 / -1;
+}
+
+.staffDetailFullGrid .detailPanel {
+  min-height: auto;
+}
+
+.staffDetailFullGrid .detailPanel h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fullRiskPanel {
+  align-content: start;
+}
+
+.staffDetailRoomCard {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.staffDetailRoomCard img {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.staffDetailRoomCard strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #111827;
+  font-size: 1.15rem;
+}
+
+.staffDetailRoomCard p {
+  margin: 0 0 14px;
+  color: #566174;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.staffDetailPerks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.staffDetailPerks span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  border-radius: 999px;
+  background: #f7f2ec;
+  color: #4a2f18;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.staffDetailPricePanel {
+  display: grid;
+  align-content: start;
+  gap: 0;
+}
+
+.priceSummaryRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  border-top: 1px solid #ececec;
+  padding: 13px 0;
+  color: #374151;
+  font-size: 0.92rem;
+}
+
+.priceSummaryRow:first-of-type {
+  border-top: 0;
+}
+
+.priceSummaryRow b {
+  color: #111827;
+}
+
+.priceSummaryRow.strong {
+  margin-top: 4px;
+  border-top-color: #d6eadb;
+  color: #111827;
+  font-weight: 950;
+}
+
+.priceSummaryRow.strong b {
+  color: #159a33;
+  font-size: 1.12rem;
+}
+
+.staffActionFull {
+  margin-top: 0;
+}
+
+.staffNotFoundCard {
+  display: grid;
+  gap: 14px;
+  max-width: 620px;
+  border: 1px solid #e6e2de;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.staffNotFoundCard h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.staffNotFoundCard p {
+  margin: 0;
+  color: #586170;
+}
+
+@media (max-width: 1180px) {
+  .publicBookingPage {
+    grid-template-columns: 1fr;
+  }
+
+  .staffDashboardShell {
+    grid-template-columns: 1fr;
+  }
+
+  .rightSidebar {
+    min-height: auto;
+  }
+
+  .rightSidebar nav,
+  .staffSidebar nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .staffSidebar {
+    min-height: auto;
+  }
+
+  .logoutLink::before {
+    top: -14px;
+  }
+}
+
+@media (max-width: 980px) {
+  .bookingWizardPage {
+    width: min(100% - 28px, 760px);
+  }
+
+  .bookingStepper {
+    gap: 12px;
+  }
+
+  .bookingStepper li {
+    font-size: 0.9rem;
+  }
+
+  .bookingStepper li:not(:last-child)::after {
+    left: calc(50% + 30px);
+    width: calc(100% - 36px);
+  }
+
+  .wizardTwoColumn,
+  .confirmWizardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .wizardFormGrid.twoColumns,
+  .wizardFormGrid.stayColumns,
+  .roomChoiceGrid,
+  .addOnGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bookingSummaryPanel {
+    order: -1;
+  }
+
+  .summaryRoomHero {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .mainNav {
+    grid-template-columns: 1fr;
+    height: auto;
+    padding: 24px;
+  }
+
+  .mainNav nav {
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .heroCopy {
+    padding: 214px 24px 0;
+  }
+
+  .searchCard,
+  .roomGrid,
+  .guestGrid,
+  .stayGrid,
+  .roomFormGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .searchButton {
+    grid-column: 1 / -1;
+  }
+
+  .roomsSection {
+    padding: 34px 24px 40px;
+  }
+
+  .customerBookingSection {
+    padding-inline: 0;
+  }
+
+  .customerConfirmationSection {
+    padding-inline: 0;
+  }
+
+  .customerBookingForm {
+    padding: 72px 30px 34px;
+  }
+
+  .customerConfirmationCard {
+    padding: 50px 30px 28px;
+  }
+
+  .staffMetricGrid,
+  .staffDashboardGrid,
+  .detailGrid,
+  .staffDetailFullGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .staffDetailFullGrid .spanTwo {
+    grid-column: span 1;
+  }
+
+  .staffDashboardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .riskDistributionBody {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .riskLegend {
+    width: min(480px, 100%);
+  }
+
+  .factorRow {
+    grid-template-columns: 150px 1fr 42px;
+  }
+
+  .factorScale {
+    padding-left: 166px;
+  }
+}
+
+@media (max-width: 680px) {
+  .bookingWizardPage {
+    width: calc(100% - 20px);
+    padding-top: 18px;
+  }
+
+  .bookingStepper {
+    grid-template-columns: 1fr;
+  }
+
+  .bookingStepper li:not(:last-child)::after {
+    display: none;
+  }
+
+  .bookingStepper li {
+    grid-template-columns: 46px 1fr;
+    justify-items: start;
+  }
+
+  .wizardFormGrid.twoColumns,
+  .wizardFormGrid.stayColumns,
+  .roomChoiceGrid,
+  .addOnGrid,
+  .summaryRoomHero {
+    grid-template-columns: 1fr;
+  }
+
+  .guestStayPanel,
+  .bookingSummaryPanel,
+  .stepTwoPanel,
+  .confirmDetailPanel,
+  .pricePanel,
+  .roomMiniSummary,
+  .addOnMiniSummary {
+    padding: 22px;
+  }
+
+  .wizardActionRow {
+    display: grid;
+  }
+
+  .wizardPrimaryButton.compact {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .addOnCard {
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .addOnCard b {
+    grid-column: 3;
+  }
+
+  .publicBookingPage {
+    padding: 6px;
+  }
+
+  .bookingTopNav {
+    display: grid;
+  }
+
+  .staffLinkButton {
+    width: 100%;
+  }
+
+  .heroSection {
+    min-height: 700px;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.35rem;
+  }
+
+  .heroCopy p {
+    font-size: 1.05rem;
+  }
+
+  .searchCard,
+  .roomGrid,
+  .rightSidebar nav,
+  .guestGrid,
+  .stayGrid,
+  .roomFormGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .searchCard {
+    width: calc(100% - 24px);
+    padding: 18px;
+  }
+
+  .roomGrid {
+    gap: 18px;
+  }
+
+  .roomTitleRow {
+    grid-template-columns: 1fr;
+  }
+
+  .guestGrid label:nth-child(3),
+  .roomFormGrid label:nth-child(3) {
+    grid-column: auto;
+  }
+
+  .customerFormLabel {
+    min-height: 58px;
+    border-radius: 18px;
+  }
+
+  .customerBookingForm {
+    gap: 22px;
+    padding: 62px 18px 26px;
+  }
+
+  .customerConfirmationCard {
+    min-height: auto;
+    gap: 18px;
+    padding: 48px 18px 24px;
+  }
+
+  .confirmationCheck {
+    width: 76px;
+    height: 76px;
+  }
+
+  .confirmationCheck svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .confirmationPanel {
+    padding: 22px 18px;
+  }
+
+  .confirmationRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    text-align: left;
+  }
+
+  .customerBookingForm input,
+  .customerBookingForm select,
+  .customerBookingForm textarea,
+  .dateInputBox {
+    min-height: 56px;
+    padding-inline: 16px;
+    font-size: 1rem;
+  }
+
+  .reviewButton {
+    min-height: 60px;
+    font-size: 1.08rem;
+  }
+
+  .selectedRoomSummary {
+    grid-template-columns: 1fr;
+  }
+
+  .selectedRoomSummary img {
+    width: 100%;
+    height: 170px;
+  }
+
+  .selectedRoomSummary strong {
+    justify-self: start;
+  }
+
+  .staffDashboardShell {
+    width: 100%;
+  }
+
+  .staffSidebar {
+    padding: 26px 18px 28px;
+  }
+
+  .staffSidebar nav,
+  .staffMetricGrid,
+  .detailGrid,
+  .staffDetailFullGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .staffDashboardMain {
+    padding: 24px 18px 20px;
+  }
+
+  .staffDetailMain {
+    padding: 24px 18px 22px;
+  }
+
+  .staffHeader {
+    display: grid;
+  }
+
+  .staffDetailPageHeader,
+  .staffDetailHero {
+    display: grid;
+  }
+
+  .staffRiskBadge {
+    justify-items: start;
+    min-width: 0;
+  }
+
+  .staffDetailFullGrid .spanTwo {
+    grid-column: 1 / -1;
+  }
+
+  .staffDetailRoomCard {
+    grid-template-columns: 1fr;
+  }
+
+  .staffDetailRoomCard img {
+    height: 190px;
+  }
+
+  .staffDateControls {
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+  }
+
+  .staffDateControls input {
+    width: calc(50% - 28px);
+  }
+
+  .metricCard {
+    min-height: 142px;
+    padding: 24px 20px;
+  }
+
+  .staffPanel {
+    padding: 18px;
+  }
+
+  .panelTitleRow {
+    display: grid;
+  }
+
+  .chartLegend {
+    justify-content: flex-start;
+  }
+
+  .trendChart {
+    grid-template-columns: 32px 1fr;
+  }
+
+  .trendLabels {
+    font-size: 0.72rem;
+  }
+
+  .factorList {
+    padding-right: 0;
+  }
+
+  .factorRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .factorRow > span {
+    text-align: left;
+  }
+
+  .factorScale {
+    padding-left: 0;
+  }
+
+  .riskFilterBar .resetDataButton {
+    margin-left: 0;
+  }
+
+  .staffDetailCard {
+    padding: 28px 16px 18px;
+  }
+
+  .detailHeader,
+  .actionRow {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .detailHeader {
+    display: grid;
+  }
+
+  .detailRow {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

@@ -54,7 +54,7 @@ def configure_tracking(tracking_uri: str, experiment_name: str, use_dagshub: boo
 
 
 def load_json(path: Path, default: Any) -> Any:
-    """Read a JSON metadata file, falling back to a safe default."""
+    """Read JSON metadata or return the default value."""
     if not path.exists():
         return default
     return json.loads(path.read_text(encoding="utf-8"))
@@ -154,7 +154,6 @@ def main() -> None:
 
     search = build_search(args.random_state, args.cv, args.n_iter, args.n_jobs)
     with mlflow.start_run(run_name="manual_random_forest_tuning"):
-        # Log the experiment context before training so each run is traceable.
         mlflow.log_param("model_type", "RandomForestClassifier")
         mlflow.log_param("dataset_dir", str(args.data_dir))
         mlflow.log_param("target_column", args.target_column)
@@ -166,7 +165,6 @@ def main() -> None:
         mlflow.log_param("test_rows", len(x_test))
         mlflow.log_param("feature_count", x_train.shape[1])
 
-        # Fit the search object and evaluate the best model on the test split.
         search.fit(x_train, y_train)
         best_model: RandomForestClassifier = search.best_estimator_
         predictions = best_model.predict(x_test)
@@ -190,7 +188,6 @@ def main() -> None:
         for param_name, param_value in search.best_params_.items():
             mlflow.log_param(f"best_{param_name}", param_value)
 
-        # Store evaluation outputs as files so they are easy to inspect later.
         args.artifact_dir.mkdir(parents=True, exist_ok=True)
         cv_results_path = args.artifact_dir / "cv_results.csv"
         report_path = args.artifact_dir / "classification_report.json"
@@ -217,7 +214,6 @@ def main() -> None:
         mlflow.log_dict({"feature_columns": feature_columns}, "feature_columns.json")
         mlflow.log_artifacts(str(args.artifact_dir), artifact_path="evaluation")
 
-        # Include the model signature to make serving and validation clearer.
         signature = infer_signature(x_train.head(5), best_model.predict(x_train.head(5)))
         mlflow.sklearn.log_model(
             sk_model=best_model,
@@ -226,7 +222,6 @@ def main() -> None:
             input_example=x_train.head(3),
         )
 
-        # Export a lightweight serving bundle outside MLflow for local API usage.
         args.model_output.mkdir(parents=True, exist_ok=True)
         joblib.dump(best_model, args.model_output / "model.joblib")
         write_json(args.model_output / "label_mapping.json", label_mapping)

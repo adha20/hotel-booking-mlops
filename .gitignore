@@ -4,6 +4,16 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 .env
+.env.*
+!.env.example
+!*.env.example
 *.log
+README_SUBMISSION_SEBELUMNYA.md
 
 Monitoring dan Logging/.env
+
+node_modules/
+.next/
+out/
+.env.local
+.env*.local
