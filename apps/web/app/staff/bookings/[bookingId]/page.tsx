@@ -10,6 +10,7 @@ import {
   CalendarDays,
   Check,
   ClipboardCheck,
+  ExternalLink,
   FileText,
   Gauge,
   LayoutDashboard,
@@ -276,6 +277,13 @@ function ActionRow({
 function StaffSidebar() {
   const navItems = [
     { label: "Dashboard", icon: LayoutDashboard, href: "/staff", active: false },
+    {
+      label: "Grafana",
+      icon: Gauge,
+      href: process.env.NEXT_PUBLIC_GRAFANA_DASHBOARD_URL?.trim() || "/staff",
+      external: Boolean(process.env.NEXT_PUBLIC_GRAFANA_DASHBOARD_URL?.trim()),
+      disabled: !process.env.NEXT_PUBLIC_GRAFANA_DASHBOARD_URL?.trim(),
+    },
     { label: "Bookings", icon: CalendarDays, href: "/staff", active: true },
     { label: "Risk Monitoring", icon: Gauge, href: "/staff", active: false },
     { label: "Customers", icon: Users, href: "/staff", active: false },
@@ -293,10 +301,28 @@ function StaffSidebar() {
       <nav>
         {navItems.map((item) => {
           const Icon = item.icon;
+          const className = `${item.active ? "active" : ""} ${item.disabled ? "disabled" : ""}`;
+
+          if (item.external) {
+            return (
+              <a className={className} href={item.href} key={item.label} rel="noreferrer" target="_blank">
+                <Icon size={24} />
+                <span>{item.label}</span>
+                <ExternalLink className="navExternalIcon" size={15} />
+              </a>
+            );
+          }
+
           return (
-            <Link className={item.active ? "active" : ""} href={item.href} key={item.label}>
+            <Link
+              aria-disabled={item.disabled || undefined}
+              className={className}
+              href={item.href}
+              key={item.label}
+              title={item.disabled ? "Set NEXT_PUBLIC_GRAFANA_DASHBOARD_URL" : undefined}
+            >
               <Icon size={24} />
-              {item.label}
+              <span>{item.label}</span>
             </Link>
           );
         })}

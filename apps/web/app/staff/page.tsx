@@ -8,6 +8,7 @@ import {
   Building2,
   CalendarDays,
   ChevronDown,
+  ExternalLink,
   FileText,
   Gauge,
   LayoutDashboard,
@@ -312,12 +313,19 @@ function StaffDashboard({
 
 function StaffSidebar() {
   const navItems = [
-    { label: "Dashboard", icon: LayoutDashboard, active: true },
-    { label: "Bookings", icon: CalendarDays },
-    { label: "Risk Monitoring", icon: Gauge },
-    { label: "Customers", icon: Users },
-    { label: "Reports", icon: FileText },
-    { label: "Settings", icon: Settings },
+    { label: "Dashboard", icon: LayoutDashboard, href: "#staff-dashboard", active: true },
+    {
+      label: "Grafana",
+      icon: Gauge,
+      href: process.env.NEXT_PUBLIC_GRAFANA_DASHBOARD_URL?.trim() || "#staff-dashboard",
+      external: Boolean(process.env.NEXT_PUBLIC_GRAFANA_DASHBOARD_URL?.trim()),
+      disabled: !process.env.NEXT_PUBLIC_GRAFANA_DASHBOARD_URL?.trim(),
+    },
+    { label: "Bookings", icon: CalendarDays, href: "#staff-dashboard" },
+    { label: "Risk Monitoring", icon: Gauge, href: "#staff-dashboard" },
+    { label: "Customers", icon: Users, href: "#staff-dashboard" },
+    { label: "Reports", icon: FileText, href: "#staff-dashboard" },
+    { label: "Settings", icon: Settings, href: "#staff-dashboard" },
   ];
 
   return (
@@ -331,9 +339,18 @@ function StaffSidebar() {
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
-            <a className={item.active ? "active" : ""} href="#staff-dashboard" key={item.label}>
+            <a
+              aria-disabled={item.disabled || undefined}
+              className={`${item.active ? "active" : ""} ${item.disabled ? "disabled" : ""}`}
+              href={item.href}
+              key={item.label}
+              rel={item.external ? "noreferrer" : undefined}
+              target={item.external ? "_blank" : undefined}
+              title={item.disabled ? "Set NEXT_PUBLIC_GRAFANA_DASHBOARD_URL" : undefined}
+            >
               <Icon size={24} />
-              {item.label}
+              <span>{item.label}</span>
+              {item.external ? <ExternalLink className="navExternalIcon" size={15} /> : null}
             </a>
           );
         })}

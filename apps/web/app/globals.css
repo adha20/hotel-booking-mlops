@@ -1774,6 +1774,21 @@ p {
   font-weight: 800;
 }
 
+.staffSidebar nav a span {
+  flex: 1;
+}
+
+.staffSidebar nav a .navExternalIcon {
+  flex: 0 0 auto;
+  opacity: 0.72;
+}
+
+.staffSidebar nav a.disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  pointer-events: none;
+}
+
 .staffSidebar nav a.active {
   background: linear-gradient(90deg, rgba(185, 130, 60, 0.58), rgba(185, 130, 60, 0.36));
 }
